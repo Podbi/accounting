@@ -1,0 +1,19 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'reports/style.css'%}" />
+
+<h1>Nejnovější přidané položky</h1>
+{% if latest_record_list %}
+    <ul>
+    {% for record in latest_record_list %}
+        <li><a href="{% url 'record:edit' record.id %}">{{ record }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Žádné položky ještě nebyly přidány.</p>
+{% endif %}
+<div>
+    <a href="{% url 'record:create' %}" class="top-menu">
+        <span class="glyphicon glyphicon-plus">Nový záznam</span>
+    </a>
+</div>
