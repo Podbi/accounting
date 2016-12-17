@@ -8,10 +8,10 @@ from .forms import RecordForm
 
 class IndexView(generic.ListView):
     template_name = 'reports/index.html'
-    context_object_name = 'latest_record_list'
+    context_object_name = 'all_records_list'
     
     def get_queryset(self):
-        return Record.objects.order_by('-date')[:5]
+        return Record.objects.order_by('-date')
 
 class RecordView:
     def edit(request, pk):

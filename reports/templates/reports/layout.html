@@ -1,0 +1,23 @@
+{% load static %}
+<html>
+    <head>
+        <title>Domácní účetnictví</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'reports/style.css'%}" />
+    </head>
+    <body>
+        <div class="page-header">
+            <h1>Domácí účetnictví</h1>
+        </div>
+        <nav class="navbar navbar-light bg-faded">
+          <a class="navbar-brand" href="{% url 'record:index' %}">Seznam</a>
+        </nav>
+        <div class="content container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
