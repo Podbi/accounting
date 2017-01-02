@@ -2,14 +2,30 @@
 <html>
     <head>
         <title>Domácní účetnictví</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'reports/style.css'%}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'reports/style.css' %}" />
+        <script type="text/javascript" src="{% static 'reports/js/jquery-3.1.1.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'reports/js/bootstrap.min.js' %}"></script>
     </head>
     <body>
         <div class="page-header">
             <h1>Domácí účetnictví</h1>
         </div>
         <nav class="navbar navbar-light bg-faded">
-          <a class="navbar-brand" href="{% url 'record:index' %}">Seznam</a>
+            <a class="navbar-brand" href="{% url 'record:index' %}">Seznam</a>
+            <span class="dropdown navbar-brand">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    Měsíční vyhodnocení <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {% for summary in monthSummaries %}
+                        <li>
+                            <a class="navbar-brand" href="{{ summary.url }}">
+                                {{ summary.label }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </span>
         </nav>
         <div class="content container">
             <div class="row">

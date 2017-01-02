@@ -4,6 +4,10 @@
     <h2>Měsíční vyhodnocení pro {{ month }} {{ year }}</h2>
     
     <table class="table">
+        <colgroup>
+            <col style="width: 70%">
+            <col style="width: 30%">
+        </colgroup>
         <thead>
             <tr>
                 <th>Výdaje</th>
@@ -11,22 +15,34 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in rows %}
-                {% if row.0 < 0 %}
-                    <tr>
-                        <td>
-                            {{ row.2 }}
-                        </td>
-                        <td class="alert alert-danger">
-                            {{ row.0 }} {{ row.1 }}
-                        </td>
-                    </tr>
-                {% endif %}
+            {% for expense in summary.expenses %}
+                <tr>
+                    <td>
+                        {{ expense.name }}
+                    </td>
+                    <td class="alert alert-danger">
+                        {{ expense.amount }} {{ expense.currency }}
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
+        <tfooter>
+            <tr>
+                <th>
+                    Celkové výdaje
+                </th>
+                <th class="alert alert-danger">
+                    {{ summary.expense }} {{ summary.currency }}
+                </th>
+            </tr>
+        </tfooter>
     </table>
     
     <table class="table">
+        <colgroup>
+            <col style="width: 70%">
+            <col style="width: 30%">
+        </colgroup>
         <thead>
             <tr>
                 <th>Příjmy</th>
@@ -34,18 +50,48 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in rows %}
-                {% if row.0 > 0 %}
-                    <tr>
-                        <td>
-                            {{ row.2 }}
-                        </td>
-                        <td class="alert alert-success">
-                            {{ row.0 }} {{ row.1 }}
-                        </td>
-                    </tr>
-                {% endif %}
+            {% for revenue in summary.revenues %}
+                <tr>
+                    <td>
+                        {{ revenue.name }}
+                    </td>
+                    <td class="alert alert-success">
+                        {{ revenue.amount }} {{ revenue.currency }}
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
+        <tfooter>
+            <tr>
+                <th>
+                    Celkové příjmy
+                </th>
+                <th class="alert alert-success">
+                    {{ summary.revenue }} {{ summary.currency }}
+                </th>
+            </tr>
+        </tfooter>
     </table>
+    
+    <table class="table">
+        <colgroup>
+            <col style="width: 70%">
+            <col style="width: 30%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Výsledek měsíce</th>
+                
+                <th
+                    {% if summary.summary >= 0 %}
+                        class="alert alert-success"
+                    {% else %}
+                        class="alert alert-danger"
+                    {% endif %}
+                >
+                    {{ summary.summary }} {{ summary.currency }}
+                <th>
+            </tr>
+        </thead>
+    </tbody>
 {% endblock %}
