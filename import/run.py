@@ -108,10 +108,10 @@ class RecordFactory:
         if money.group(2).strip() == 'Kč':
             currency = CURRENCY_CZK
         else:
-            raise Error('Neočekávaná měna' + money.group(2).strip())
+            raise Error('Neočekávaná měna' + money.group(2).strip().replace(' ', ''))
         return {
             'date' : date,
-            'money' : money.group(1).strip(),
+            'money' : float(money.group(1).strip().replace(' ', '')),
             'currency': currency,
             'description' : row['description'],
             'type' : row['type'],
