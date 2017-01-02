@@ -5,6 +5,8 @@ from django.views import generic
 
 from .models import Record
 from .forms import RecordForm
+from .service import MonthSummaryCalculator
+from .service import DateFactory
 
 class IndexView(generic.ListView):
     template_name = 'reports/index.html'
@@ -35,3 +37,12 @@ class RecordView:
         else:
             form = RecordForm()
         return render(request, 'reports/new.html', {'form' : form})
+    
+class MonthView:
+    def month(request, year, month):
+        calculator = MonthSummaryCalculator()
+        rows = calculator.calculate(
+            DateFactory().createFirstDayOfMonth(int(month), int(year)),
+            DateFactory().createLastDayOfMonth(int(month), int(year))
+        )
+        return render(request, 'reports/month.html', {'month' : month, 'year' : year, 'rows' : rows})

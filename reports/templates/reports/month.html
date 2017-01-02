@@ -1,0 +1,51 @@
+{% extends 'reports/layout.html' %}
+
+{% block content %}
+    <h2>Měsíční vyhodnocení pro {{ month }} {{ year }}</h2>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Výdaje</th>
+                <th>Částka</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                {% if row.0 < 0 %}
+                    <tr>
+                        <td>
+                            {{ row.2 }}
+                        </td>
+                        <td class="alert alert-danger">
+                            {{ row.0 }} {{ row.1 }}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Příjmy</th>
+                <th>Částka</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                {% if row.0 > 0 %}
+                    <tr>
+                        <td>
+                            {{ row.2 }}
+                        </td>
+                        <td class="alert alert-success">
+                            {{ row.0 }} {{ row.1 }}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
