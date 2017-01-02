@@ -10,6 +10,66 @@ SOURCE_BANK = 2
 SOURCE_HOME = 3
 CURRENCY_CZK = 1
 
+class Repository:
+    def __init__(self, database):
+        self.database = database
+        self.cursor = database.cursor()
+    
+    def hasRecord(self, date, description, money, currency, source):
+        self.cursor.execute(
+            'SELECT id FROM reports_record WHERE date = ? AND description = ? AND money = ? AND currency_id = ? AND source_id = ?',
+            (
+               date,
+               description,
+               money,
+               currency,
+               source
+            )
+        )
+        
+        return (self.cursor.fetchone() != None)
+    
+    def createRecord(self, date, description, money, currency, source, type):
+        self.cursor.execute(
+            'INSERT INTO reports_record(date, description, money, currency_id, source_id, type_id) VALUES(?, ?, ?, ?, ?, ?)',
+            (
+               date,
+               description,
+               money,
+               currency,
+               source,
+               type
+            )
+        )
+    
+    def getType(self, type):
+        self.cursor.execute(
+            'SELECT id FROM reports_recordtype WHERE name = ?',
+            (type,)
+        )
+        type = self.cursor.fetchone()
+        if (type != None):
+           return type[0]
+        else:
+            return None
+        
+    def createType(self, name):
+        self.cursor.execute(
+            'INSERT INTO reports_recordtype(name) VALUES(?)',
+            (name,)
+        )
+        self.cursor.execute(
+            'SELECT id FROM reports_recordtype WHERE name = ?',
+            (name,)
+        )
+        type = self.cursor.fetchone()
+        
+        return type[0]
+    
+    def commit(self):
+        self.database.commit()
+        self.database.close()
+
 class RecordFactory:
     def create(self, row, date):
         records = []
@@ -62,9 +122,8 @@ class RecordFactory:
 if len(sys.argv) < 2:
     raise Exception('Málo vstupních argumentů. Zadej název souboru')
 
-database = sqlite3.connect('../db.sqlite3')
-
 factory = RecordFactory()
+repository = Repository(sqlite3.connect('../db.sqlite3'))
 date = ''
 records = []
 filepath = sys.argv[1]
@@ -96,58 +155,27 @@ print('Celkem bylo nalezeno',len(records),'záznamů, které budou vloženy do d
 print('Vkládám záznamy')
 counter = 0
 for record in records:
-    cursor = database.cursor()
-    cursor.execute(
-        'SELECT id FROM reports_record WHERE date = ? AND description = ? AND money = ? AND currency_id = ? AND source_id = ?',
-        (
+    if (repository.hasRecord(record['date'], record['description'], record['money'], record['currency'], record['source'])):
+        print('Záznam ze dne', record['date'], 'za', record['money'], 'již existuje.')
+    else:
+        type = repository.getType(record['type'])
+        if (type != None):
+            record['type'] = type
+        else:
+            print('')
+            print('Vkládám nový typ záznamu',record['type'])
+            record['type'] = repository.createType(record['type'])
+        repository.createRecord(
             record['date'],
             record['description'],
             record['money'],
             record['currency'],
-            record['source']
-            
-        )
-    )
-    if (cursor.fetchone() == None):
-        cursor.execute(
-            'SELECT id FROM reports_recordtype WHERE name = ?',
-            (record['type'],)
-        )
-        type = cursor.fetchone()
-        if (type != None):
-            record['type'] = type[0]
-        else:
-            print('')
-            print('Vkládám nový typ záznamu',record['type'])
-            cursor.execute(
-                'INSERT INTO reports_recordtype(name) VALUES(?)',
-                (record['type'],)
-            )
-            cursor.execute(
-                'SELECT id FROM reports_recordtype WHERE name = ?',
-                (record['type'],)
-            )
-            type = cursor.fetchone()
-            record['type'] = type[0]
-        cursor.execute(
-            'INSERT INTO reports_record(date, description, money, currency_id, source_id, type_id) VALUES(?, ?, ?, ?, ?, ?)',
-            (
-                record['date'],
-                record['description'],
-                record['money'],
-                record['currency'],
-                record['source'],
-                record['type']
-            )
+            record['source'],
+            record['type']
         )
         counter = counter + 1
         print('.', end='')
         
-    else:
-        print('Záznam ze dne', record['date'], 'za', record['money'], 'již existuje.')
-
-
-database.commit()
-database.close()
+repository.commit()
 print('')
 print(counter,'záznamů bylo úspěšně vloženo')
