@@ -20,7 +20,7 @@ class IndexView(generic.ListView):
         return Record.objects.order_by('-date')[:20]
 
 class RecordListView(generic.ListView):
-    template_name = 'reports/index.html'
+    template_name = 'reports/list.html'
     context_object_name = 'all_records_list'
     
     def get_queryset(self):

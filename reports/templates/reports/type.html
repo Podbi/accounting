@@ -1,59 +1,6 @@
 {% extends 'reports/layout.html' %}
 
 {% block content %}
-    <h2>Seznam položek za <a href="{% url 'record:month_summary' month=monthId year=year %}">{{ month }} {{ year }}</a></h2>
-    {% if records %}
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Datum</th>
-                    <th>Popis</th>
-                    <th>Místo</th>
-                    <th>Typ</th>
-                    <th>Částka</th>
-                    <th>Zdroj</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for record in records %}
-                    <tr>
-                        <td>{{ record.date|date:"d.m.Y" }}</td>
-                        <td>
-                            <a href="{% url 'record:edit' record.id %}">
-                                {{ record.description }}
-                            </a>
-                        </td>
-                        <td>{{ record.place }}</td>
-                        <td>{{ record.type }}</td>
-                        <td 
-                            {% if record.money > 0 %} 
-                                class="alert alert-success"
-                            {% else %}
-                                 class="alert alert-danger"
-                            {% endif %}
-                        >
-                            {{ record.money }} {{ record.currency }}
-                        </td>
-                        <td>{{ record.source }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-            <tfooter>
-                <tr>
-                    <th colspan="4">Celkem</th>
-                    <th colspan="2"
-                        {% if summary > 0 %} 
-                                class="alert alert-success"
-                            {% else %}
-                                 class="alert alert-danger"
-                            {% endif %}
-                    >
-                        {{ summary }} {{ currency }}
-                    </th>
-                </tr>
-            </tfooter>
-        </table>
-    {% else %}
-        <p>Žádné položky ještě nebyly přidány.</p>
-    {% endif %}
+    <h2>Seznam položek typu {{ type }} za <a href="{% url 'record:month_summary' month=monthId year=year %}">{{ month }} {{ year }}</a></h2>
+    {% include "reports/record/list.html" with records=records summary=summary currency=currency only %}
 {% endblock %}
