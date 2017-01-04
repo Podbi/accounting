@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.views import generic
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Record
 from .models import RecordType
@@ -12,19 +13,20 @@ from .service import DateFactory
 from .service import RecordTypeRepository
 from .service import RecordByMonthRepository
 
-class IndexView(generic.ListView):
-    template_name = 'reports/index.html'
-    context_object_name = 'all_records_list'
-    
-    def get_queryset(self):
-        return Record.objects.order_by('-date')[:20]
-
-class RecordListView(generic.ListView):
-    template_name = 'reports/list.html'
-    context_object_name = 'all_records_list'
-    
-    def get_queryset(self):
-        return Record.objects.order_by('-date')
+class IndexView:
+    def index(request):
+        records = Record.objects.order_by('-date')
+        paginator = Paginator(records, 20)
+        
+        page = request.GET.get('page')
+        try:
+            records = paginator.page(page)
+        except PageNotAnInteger:
+            records = paginator.page(1)
+        except EmptyPage:
+            records = paginator.page(paginator.num_pages)
+            
+        return render(request, 'reports/index.html', {'records' : records})
 
 class RecordView:
     def edit(request, pk):

@@ -1,12 +1,27 @@
 {% extends 'reports/layout.html' %}
 
 {% block content %}
-    <h2 class="pull-left">Nejnovější záznamy</h2>
+    <h2 class="pull-left">Seznam položek</h2>
     <div class="pull-right">
         <a href="{% url 'record:create' %}" class="btn btn-primary">
             <span>Nový záznam</span>
         </a>
     </div>
     <div class="clearfix"></div>
-    {% include "reports/record/list.html" with records=all_records_list summary=summary currency=currency only %}
+    {% include "reports/record/list.html" with records=records summary=summary currency=currency only %}
+    <div class="pagination">
+    <span class="step-links">
+        {% if records.has_previous %}
+            <a class="btn btn-default" href="?page={{ records.previous_page_number }}">Předchozí</a>
+        {% endif %}
+
+        <span class="current">
+            Strana <a href="?page={{ records.number }}">{{ records.number }}</a> z <a href="?page={{ records.paginator.num_pages }}">{{ records.paginator.num_pages }}</a>
+            </span>
+
+        {% if records.has_next %}
+            <a class="btn btn-default" href="?page={{ records.next_page_number }}">Další</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}
