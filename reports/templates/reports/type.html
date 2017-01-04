@@ -1,14 +1,8 @@
 {% extends 'reports/layout.html' %}
 
 {% block content %}
-    <h2 class="pull-left">Seznam položek</h2>
-    <div class="pull-right">
-        <a href="{% url 'record:create' %}" class="btn btn-primary">
-            <span>Nový záznam</span>
-        </a>
-    </div>
-    <div class="clearfix"></div>
-    {% if all_records_list %}
+    <h2>Seznam položek za <a href="{% url 'record:month_summary' month=monthId year=year %}">{{ month }} {{ year }}</a></h2>
+    {% if records %}
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -21,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for record in all_records_list %}
+                {% for record in records %}
                     <tr>
                         <td>{{ record.date|date:"d.m.Y" }}</td>
                         <td>
@@ -44,6 +38,20 @@
                     </tr>
                 {% endfor %}
             </tbody>
+            <tfooter>
+                <tr>
+                    <th colspan="4">Celkem</th>
+                    <th colspan="2"
+                        {% if record.money > 0 %} 
+                                class="alert alert-success"
+                            {% else %}
+                                 class="alert alert-danger"
+                            {% endif %}
+                    >
+                        {{ summary }} {{ currency }}
+                    </th>
+                </tr>
+            </tfooter>
         </table>
     {% else %}
         <p>Žádné položky ještě nebyly přidány.</p>

@@ -4,12 +4,22 @@ from django.urls import reverse
 from django.views import generic
 
 from .models import Record
+from .models import RecordType
 from .forms import RecordForm
 from .service import MonthSummaryCalculator
 from .service import MonthTranslator
 from .service import DateFactory
+from .service import RecordTypeRepository
+from .service import RecordByMonthRepository
 
 class IndexView(generic.ListView):
+    template_name = 'reports/index.html'
+    context_object_name = 'all_records_list'
+    
+    def get_queryset(self):
+        return Record.objects.order_by('-date')[:20]
+
+class RecordListView(generic.ListView):
     template_name = 'reports/index.html'
     context_object_name = 'all_records_list'
     
@@ -39,7 +49,7 @@ class RecordView:
             form = RecordForm()
         return render(request, 'reports/new.html', {'form' : form})
     
-class MonthView:
+class MonthSummaryView:
     def month(request, year, month):
         calculator = MonthSummaryCalculator()
         summary = calculator.calculate(
@@ -47,8 +57,56 @@ class MonthView:
             DateFactory().createLastDayOfMonth(int(month), int(year)),
             'CZK'
         )
-        return render(request, 'reports/month.html', {
+        
+        return render(request, 'reports/month_summary.html', {
             'month' : MonthTranslator().translate(int(month)), 
+            'monthId' : month,
             'year' : year, 
             'summary' : summary
         })
+        
+class MonthView:
+    def month(request, year, month):
+        records = RecordByMonthRepository().findAllByDates(
+            DateFactory().createFirstDayOfMonth(int(month), int(year)),
+            DateFactory().createLastDayOfMonth(int(month), int(year)),
+            'CZK'
+        )
+        
+        summary = 0.00;
+        for record in records:
+            summary += record.money
+        
+        return render(request, 'reports/month.html', {
+            'month' : MonthTranslator().translate(int(month)), 
+            'monthId': month,
+            'year' : year, 
+            'records' : records,
+            'summary' : summary,
+            'currency' : 'CZK'
+        })
+
+class MonthTypeView:
+    def type(request, year, month, type):
+        type = get_object_or_404(RecordType, pk=type)
+        records = RecordTypeRepository().findAllByTypeAndDates(
+            type.id,
+            DateFactory().createFirstDayOfMonth(int(month), int(year)),
+            DateFactory().createLastDayOfMonth(int(month), int(year)),
+            'CZK'
+        )
+        
+        summary = 0.00;
+        for record in records:
+            summary += record.money
+        
+        return render(request, 'reports/type.html', {
+            'month' : MonthTranslator().translate(int(month)), 
+            'monthId': month,
+            'type' : type,
+            'year' : year, 
+            'records' : records,
+            'summary' : summary,
+            'currency' : 'CZK'
+        })
+        

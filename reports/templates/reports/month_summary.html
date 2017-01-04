@@ -1,0 +1,103 @@
+{% extends 'reports/layout.html' %}
+
+{% block content %}
+    <h2>Měsíční vyhodnocení pro {{ month }} {{ year }}</h2>
+    
+    <table class="table">
+        <colgroup>
+            <col style="width: 70%">
+            <col style="width: 30%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Výdaje</th>
+                <th>Částka</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in summary.expenses %}
+                <tr>
+                    <td>
+                        {{ expense.name }}
+                    </td>
+                    <td class="alert alert-danger">
+                       <a href="{% url 'record:type' type=expense.type month=monthId year=year %}">{{ expense.amount }} {{ expense.currency }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfooter>
+            <tr>
+                <th>
+                    Celkové výdaje
+                </th>
+                <th class="alert alert-danger">
+                     <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summary.expense }} {{ summary.currency }}
+                    </a>
+                </th>
+            </tr>
+        </tfooter>
+    </table>
+    
+    <table class="table">
+        <colgroup>
+            <col style="width: 70%">
+            <col style="width: 30%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Příjmy</th>
+                <th>Částka</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for revenue in summary.revenues %}
+                <tr>
+                    <td>
+                        {{ revenue.name }}
+                    </td>
+                    <td class="alert alert-success">
+                         <a href="{% url 'record:type' type=revenue.type month=monthId year=year %}">{{ revenue.amount }} {{ revenue.currency }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfooter>
+            <tr>
+                <th>
+                    Celkové příjmy
+                </th>
+                <th class="alert alert-success">
+                     <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summary.revenue }} {{ summary.currency }}
+                    </a>
+                </th>
+            </tr>
+        </tfooter>
+    </table>
+    
+    <table class="table">
+        <colgroup>
+            <col style="width: 70%">
+            <col style="width: 30%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Výsledek měsíce</th>
+                
+                <th
+                    {% if summary.summary >= 0 %}
+                        class="alert alert-success"
+                    {% else %}
+                        class="alert alert-danger"
+                    {% endif %}
+                >
+                    <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summary.summary }} {{ summary.currency }}
+                    </a>
+                <th>
+            </tr>
+        </thead>
+    </tbody>
+{% endblock %}

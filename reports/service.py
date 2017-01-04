@@ -2,6 +2,8 @@ import calendar
 from datetime import datetime
 from django.db import connection
 from django.urls import reverse
+from _datetime import date
+from _codecs import code_page_decode
 
 class MonthTranslator:
     def __init__(self):
@@ -27,12 +29,12 @@ class MonthSummaryCalculator:
     def calculate(self, dateFrom, dateTo, currency):
         with connection.cursor() as cursor:
             cursor.execute("""
-                SELECT SUM(record.money), currency.code, type.name 
+                SELECT SUM(record.money), currency.code, type.id, type.name 
                 FROM reports_record AS record 
                 JOIN reports_currency AS currency ON record.currency_id = currency.id 
                 JOIN reports_recordtype AS type ON record.type_id = type.id 
                 WHERE record.date >= %s AND record.date <= %s AND currency.code = %s
-                GROUP BY currency.code, type.name 
+                GROUP BY currency.code, type.id, type.name 
                 ORDER BY type.name
                 """,
                 (
@@ -45,7 +47,7 @@ class MonthSummaryCalculator:
         
         summary = MonthSummary(currency)
         for row in rows:
-            record = SummaryRecord(row[2], row[0], row[1])
+            record = SummaryRecord(row[2], row[3], row[0], row[1])
             if record.amount > 0:
                 summary.addRevenue(record)
             elif record.amount < 0:
@@ -67,7 +69,7 @@ class MonthSummaryCalculator:
         months = []
         for row in rows:
             months.append({
-                'url' : reverse('record:month', kwargs={'month': row[1], 'year' : row[0]}),
+                'url' : reverse('record:month_summary', kwargs={'month': row[1], 'year' : row[0]}),
                 'label' : translator.translate(int(row[1])) + ' ' + row[0]
             })
         
@@ -98,7 +100,8 @@ class MonthSummary:
     
 
 class SummaryRecord:
-    def __init__(self, name, amount, currency):
+    def __init__(self, type, name, amount, currency):
+        self.type = type
         self.name = name
         self.amount = amount
         self.currency = currency
@@ -127,3 +130,105 @@ class DateFactory:
         
     def _createDate(self, day, month, year):
         return datetime.strptime(str(day) + str(month) + str(year), '%d%m%Y')
+    
+class Record:
+    def __init__(self, id, date, description, place, type, money, currency, source):
+        self.id = id
+        self.date = date
+        self.description = description
+        self.place = place
+        self.type = type
+        self.money = money
+        self.currency = currency
+        self.source = source
+    
+class RecordTypeRepository:
+    def findAllByTypeAndDates(self, type, dateFrom, dateTo, currency):
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT
+                    record.id,
+                    record.date,
+                    record.description,
+                    record.place,
+                    type.name AS type,
+                    record.money,
+                    currency.code AS currency,
+                    source.name AS source
+                FROM reports_record AS record 
+                JOIN reports_currency AS currency ON record.currency_id = currency.id 
+                JOIN reports_recordtype AS type ON record.type_id = type.id
+                JOIN reports_moneysource AS source ON record.source_id = source.id 
+                WHERE record.date >= %s AND record.date <= %s AND currency.code = %s AND type.id = %s
+                ORDER BY record.date DESC
+                """,
+                (
+                    dateFrom.strftime('%Y-%m-%d %H:%M:%S'),
+                    dateTo.strftime('%Y-%m-%d %H:%M:%S'),
+                    currency,
+                    type
+                )
+            )
+            rows = cursor.fetchall()
+        
+        records = []
+        for row in rows:
+            records.append(
+                Record(
+                    row[0],
+                    row[1],
+                    row[2],
+                    row[3],
+                    row[4],
+                    row[5],
+                    row[6],
+                    row[7]
+                )
+           )
+        
+        return records
+    
+class RecordByMonthRepository:
+    def findAllByDates(self, dateFrom, dateTo, currency):
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT
+                    record.id,
+                    record.date,
+                    record.description,
+                    record.place,
+                    type.name AS type,
+                    record.money,
+                    currency.code AS currency,
+                    source.name AS source
+                FROM reports_record AS record 
+                JOIN reports_currency AS currency ON record.currency_id = currency.id 
+                JOIN reports_recordtype AS type ON record.type_id = type.id
+                JOIN reports_moneysource AS source ON record.source_id = source.id 
+                WHERE record.date >= %s AND record.date <= %s AND currency.code = %s
+                ORDER BY record.date DESC
+                """,
+                (
+                    dateFrom.strftime('%Y-%m-%d %H:%M:%S'),
+                    dateTo.strftime('%Y-%m-%d %H:%M:%S'),
+                    currency
+                )
+            )
+            rows = cursor.fetchall()
+        
+        records = []
+        for row in rows:
+            records.append(
+                Record(
+                    row[0],
+                    row[1],
+                    row[2],
+                    row[3],
+                    row[4],
+                    row[5],
+                    row[6],
+                    row[7]
+                )
+           )
+        
+        return records

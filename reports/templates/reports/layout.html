@@ -11,7 +11,8 @@
             <h1>Domácí účetnictví</h1>
         </div>
         <nav class="navbar navbar-light bg-faded">
-            <a class="navbar-brand" href="{% url 'record:index' %}">Seznam</a>
+            <a class="navbar-brand" href="{% url 'record:list' %}">Kompletní seznam</a>
+            <a class="navbar-brand" href="{% url 'record:index' %}">Nejnovější záznamy</a>
             <span class="dropdown navbar-brand">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     Měsíční vyhodnocení <span class="caret"></span>
@@ -26,6 +27,7 @@
                     {% endfor %}
                 </ul>
             </span>
+            <a class="navbar-brand" href="{% url 'record:create' %}">Nový záznam</a>
         </nav>
         <div class="content container">
             <div class="row">
