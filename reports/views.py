@@ -7,11 +7,11 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Record
 from .models import RecordType
 from .forms import RecordForm
-from .service import MonthSummaryCalculator
-from .service import MonthTranslator
-from .service import DateFactory
-from .service import RecordTypeRepository
-from .service import RecordByMonthRepository
+from reports.services.monthSummaryCalculator import MonthSummaryCalculator
+from reports.services.monthTranslator import MonthTranslator
+from reports.services.dateFactory import DateFactory
+from reports.services.recordTypeRepository import RecordTypeRepository
+from reports.services.recordByMonthRepository import RecordByMonthRepository
 
 class IndexView:
     def index(request):

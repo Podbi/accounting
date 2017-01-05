@@ -1,5 +1,5 @@
 from django.test import TestCase
-from reports.service import MonthTranslator
+from reports.services.monthTranslator import MonthTranslator
 
 class MonthTranslatorTests(TestCase):
     def test_translator_translates_january_correctly(self):

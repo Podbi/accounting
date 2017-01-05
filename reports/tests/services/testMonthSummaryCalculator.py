@@ -2,9 +2,9 @@ import datetime
 from django.utils import timezone
 from django.test import TestCase
 
-from reports.service import MonthSummaryCalculator
-from reports.service import MonthSummary
-from reports.service import SummaryRecord
+from reports.services.monthSummaryCalculator import MonthSummaryCalculator
+from reports.services.monthSummary import MonthSummary
+from reports.services.summaryRecord import SummaryRecord
 from reports.models import Record
 from reports.models import RecordType
 from reports.models import Currency

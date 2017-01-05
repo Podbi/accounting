@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from reports.service import DateFactory
+from reports.services.dateFactory import DateFactory
 
 class DateFactoryTests(TestCase):
     def test_it_creates_first_day_of_month_for_august(self):

@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from reports.service import SummaryRecord
+from reports.services.summaryRecord import SummaryRecord
 
 class SummaryRecordTests(TestCase):
     def test_it_can_be_sorted_based_on_amount(self):

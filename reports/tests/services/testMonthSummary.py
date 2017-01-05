@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from reports.service import MonthSummary
-from reports.service import SummaryRecord
+from reports.services.monthSummary import MonthSummary
+from reports.services.summaryRecord import SummaryRecord
 
 class MonthSummaryTests(TestCase):
     def test_it_provides_currency_given_in_constructor(self):

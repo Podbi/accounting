@@ -2,7 +2,7 @@ import datetime
 from django.utils import timezone
 from django.test import TestCase
 
-from reports.service import RecordTypeRepository
+from reports.services.recordTypeRepository import RecordTypeRepository
 from reports.models import Record
 from reports.models import RecordType
 from reports.models import Currency
