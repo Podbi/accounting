@@ -47,5 +47,5 @@ Temporary Items
 .apdisk
 db.sqlite3
 .settings/org.eclipse.core.resources.prefs
-reports/__pycache__
-accounting/__pycache__
+__pycache__/
+__pycache__\

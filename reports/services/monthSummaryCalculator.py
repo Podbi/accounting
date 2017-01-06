@@ -49,6 +49,8 @@ class MonthSummaryCalculator:
         months = []
         for row in rows:
             months.append({
+                'month' : row[1],
+                'year' : row[0],
                 'url' : reverse('record:month_summary', kwargs={'month': row[1], 'year' : row[0]}),
                 'label' : translator.translate(int(row[1])) + ' ' + row[0]
             })

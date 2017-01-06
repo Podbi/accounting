@@ -1,7 +1,11 @@
 {% extends 'reports/layout.html' %}
 
 {% block content %}
-    <h2>Měsíční vyhodnocení pro {{ month }} {{ year }}</h2>
+    <div class="row">
+    <a href="{{ previous }}" class="col-sm-1 btn btn-default h2">Předchozí</a>
+    <h2 class="col-sm-10 text-center">Měsíční vyhodnocení pro {{ month }} {{ year }}</h2>
+    <a href="{{ next }}" class="col-sm-1 btn btn-default h2">Další</a>
+    </div>
     
     <table class="table">
         <colgroup>

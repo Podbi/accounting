@@ -60,11 +60,22 @@ class MonthSummaryView:
             'CZK'
         )
         
+        month = int(month)
+        year = int(year)
+        
         return render(request, 'reports/month_summary.html', {
-            'month' : MonthTranslator().translate(int(month)), 
-            'monthId' : month,
-            'year' : year, 
-            'summary' : summary
+            'month' : MonthTranslator().translate(month), 
+            'monthId' : "%02d" % month,
+            'year' : "%04d" % year, 
+            'summary' : summary,
+            'previous' : reverse('record:month_summary', kwargs={
+                'month': "%02d" % (12 if month == 1 else month - 1), 
+                'year' : year - 1 if month == 1 else year
+            }),
+            'next' : reverse('record:month_summary', kwargs={
+                'month': "%02d" % (1 if month == 12 else month + 1), 
+                'year' : year + 1 if month == 12 else year
+            })
         })
         
 class MonthView:
