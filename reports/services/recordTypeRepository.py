@@ -47,3 +47,30 @@ class RecordTypeRepository:
            )
         
         return records
+    
+    def findAllWithCount(self):
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT
+                    type.id,
+                    type.name,
+                    COUNT(record.id) AS count
+                FROM reports_recordtype AS type
+                LEFT JOIN reports_record AS record ON type.id = record.type_id
+                GROUP BY type.id, type.name
+                ORDER BY type.name
+            """)
+            
+            rows = cursor.fetchall()
+        
+        types = []
+        for row in rows:
+            types.append(
+                {
+                    'id' : row[0],
+                    'name' : row[1],
+                    'count' : row[2]
+                }
+             )
+        
+        return types

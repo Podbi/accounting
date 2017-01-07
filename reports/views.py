@@ -123,3 +123,12 @@ class MonthTypeView:
             'currency' : 'CZK'
         })
         
+class RecordTypeView:
+    def list(request):
+        types = RecordTypeRepository().findAllWithCount()
+        
+        return render(request, 'reports/types.html', {
+            'types' : types
+        })
+        
+        

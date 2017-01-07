@@ -1,0 +1,30 @@
+{% extends 'reports/layout.html' %}
+
+{% block content %}
+    <h2>Seznam typů</h2>
+    {% if types %}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Typ</th>
+                    <th>Počet záznamů</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for type in types %}
+                    <tr>
+                        <td>{{ type.name }}</td>
+                        <td>{{ type.count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfooter>
+                <tr>
+                    <th colspan="2">Celkem {{ types|length }} typů</th>
+                </tr>
+            </tfooter>
+        </table>
+    {% else %}
+        <p>Žádné typy ještě nebyly přidány.</p>
+    {% endif %}
+{% endblock %}
