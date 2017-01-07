@@ -22,16 +22,17 @@ class RecordTypeRepositoryTests(TestCase):
             create_record('Third Record', 50.00, timezone.now(), type),
         ]
         
-        result = RecordTypeRepository().findAllByTypeAndDates(
+        results = RecordTypeRepository().findAllByTypeAndDates(
             type.id,
             datetime.date.today() + datetime.timedelta(-15),
             datetime.date.today() + datetime.timedelta(15),
             'CZK'
         )
-        self.assertEquals(3, len(result))
-        self._assert_record(records[0], result[0])
-        self._assert_record(records[1], result[1])
-        self._assert_record(records[2], result[2])
+        self.assertEquals(3, len(results))
+        for record in records:
+            for result in results:
+                if result.id == record.id:
+                    self._assert_record(record, result)
         
     def _assert_record(self, expectedRecord, actualRecord):
         self.assertEquals(expectedRecord.id, actualRecord.id)
