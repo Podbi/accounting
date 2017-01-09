@@ -2,7 +2,7 @@ import datetime
 from django.utils import timezone
 from django.test import TestCase
 
-from reports.services.recordByMonthRepository import RecordByMonthRepository
+from reports.services.recordSummaryRepository import RecordSummaryRepository
 from reports.models import Record
 from reports.models import RecordType
 from reports.models import Currency
@@ -14,7 +14,7 @@ def create_record(description, money, date):
     source = MoneySource.objects.create()
     return Record.objects.create(description=description, date=date, money=money, currency=currency, source=source, type=type)
 
-class RecordByMonthRepositoryTests(TestCase):
+class RecordSummaryRepositoryTests(TestCase):
     def test_finds_all_by_dates(self):
         records = [
             create_record('First Record', 100.00, timezone.now()),
@@ -22,7 +22,7 @@ class RecordByMonthRepositoryTests(TestCase):
             create_record('Third Record', 50.00, timezone.now()),
         ]
         
-        results = RecordByMonthRepository().findAllByDates(
+        results = RecordSummaryRepository().findAllByDates(
             datetime.date.today() + datetime.timedelta(-15),
             datetime.date.today() + datetime.timedelta(15),
             'CZK'

@@ -2,7 +2,7 @@ from django.db import connection
 
 from .record import Record
 
-class RecordByMonthRepository:
+class RecordSummaryRepository:
     def findAllByDates(self, dateFrom, dateTo, currency):
         with connection.cursor() as cursor:
             cursor.execute("""

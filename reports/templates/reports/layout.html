@@ -26,6 +26,20 @@
                     {% endfor %}
                 </ul>
             </span>
+            <span class="dropdown navbar-brand">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    Roční vyhodnocení <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {% for summary in yearSummaries %}
+                        <li>
+                            <a class="navbar-brand" href="{{ summary.url }}">
+                                Rok {{ summary.label }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </span>
             <a class="navbar-brand" href="{% url 'record:create' %}">Nový záznam</a>
             <a class="navbar-brand" href="{% url 'record:types' %}">Seznam typů</a>
         </nav>

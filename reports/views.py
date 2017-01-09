@@ -11,7 +11,7 @@ from reports.services.monthSummaryCalculator import MonthSummaryCalculator
 from reports.services.monthTranslator import MonthTranslator
 from reports.services.dateFactory import DateFactory
 from reports.services.recordTypeRepository import RecordTypeRepository
-from reports.services.recordByMonthRepository import RecordByMonthRepository
+from reports.services.recordSummaryRepository import RecordSummaryRepository
 
 class IndexView:
     def index(request):
@@ -78,9 +78,31 @@ class MonthSummaryView:
             })
         })
         
+class YearSummaryView:
+    def year(request, year):
+        calculator = MonthSummaryCalculator()
+        summary = calculator.calculate(
+            DateFactory().createFirstDayOfMonth(1, int(year)),
+            DateFactory().createLastDayOfMonth(12, int(year)),
+            'CZK'
+        )
+        
+        year = int(year)
+        
+        return render(request, 'reports/year_summary.html', {
+            'year' : "%04d" % year, 
+            'summary' : summary,
+            'previous' : reverse('record:year_summary', kwargs={
+                'year' : year - 1
+            }),
+            'next' : reverse('record:year_summary', kwargs={
+                'year' : year + 1
+            })
+        })
+    
 class MonthView:
     def month(request, year, month):
-        records = RecordByMonthRepository().findAllByDates(
+        records = RecordSummaryRepository().findAllByDates(
             DateFactory().createFirstDayOfMonth(int(month), int(year)),
             DateFactory().createLastDayOfMonth(int(month), int(year)),
             'CZK'
@@ -113,9 +135,50 @@ class MonthTypeView:
         for record in records:
             summary += record.money
         
-        return render(request, 'reports/type.html', {
+        return render(request, 'reports/type_month.html', {
             'month' : MonthTranslator().translate(int(month)), 
             'monthId': month,
+            'type' : type,
+            'year' : year, 
+            'records' : records,
+            'summary' : summary,
+            'currency' : 'CZK'
+        })
+        
+class YearView:
+    def year(request, year):
+        records = RecordSummaryRepository().findAllByDates(
+            DateFactory().createFirstDayOfMonth(1, int(year)),
+            DateFactory().createLastDayOfMonth(12, int(year)),
+            'CZK'
+        )
+        
+        summary = 0.00;
+        for record in records:
+            summary += record.money
+        
+        return render(request, 'reports/year.html', {
+            'year' : year, 
+            'records' : records,
+            'summary' : summary,
+            'currency' : 'CZK'
+        })
+
+class YearTypeView:
+    def type(request, year, type):
+        type = get_object_or_404(RecordType, pk=type)
+        records = RecordTypeRepository().findAllByTypeAndDates(
+            type.id,
+            DateFactory().createFirstDayOfMonth(1, int(year)),
+            DateFactory().createLastDayOfMonth(12, int(year)),
+            'CZK'
+        )
+        
+        summary = 0.00;
+        for record in records:
+            summary += record.money
+        
+        return render(request, 'reports/type_year.html', {
             'type' : type,
             'year' : year, 
             'records' : records,

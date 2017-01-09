@@ -1,0 +1,6 @@
+{% extends 'reports/layout.html' %}
+
+{% block content %}
+    <h2>Seznam položek typu {{ type }} za <a href="{% url 'record:year_summary' year=year %}">Rok {{ year }}</a></h2>
+    {% include "reports/record/list.html" with records=records summary=summary currency=currency only %}
+{% endblock %}
