@@ -72,7 +72,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'reports.menu.menu_context_processor.menu_processor'
+                'reports.context.context_processor.menu_context_processor',
+                'reports.context.context_processor.balance_context_processor',
             ],
         },
     },

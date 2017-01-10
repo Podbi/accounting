@@ -8,7 +8,41 @@
     </head>
     <body>
         <div class="page-header">
-            <h1>Domácí účetnictví</h1>
+            <div class="row">
+                <div class="col-md-8">
+                    <h1>Domácí účetnictví</h1>
+                </div>
+                <div class="col-md-4">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                {% for source in balance %}
+                                    <th class="text-center">{{ source.name }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% for source in balance %}
+                                    {% if source.balance > 0 %}
+                                        <td class="alert alert-success text-center">
+                                            <a href="{% url 'record:index' %}">
+                                                {{ source.balance }}
+                                            </a>
+                                        </td>
+                                    {% else %}0 %}
+                                        <td class="alert alert-danger text-center">
+                                            <a href="{% url 'record:index' %}">
+                                                {{ source.balance }}
+                                            </a>
+                                        </td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <nav class="navbar navbar-light bg-faded">
             <a class="navbar-brand" href="{% url 'record:index' %}">Seznam položek</a>
