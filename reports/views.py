@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.views import generic
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 
 from .models import Record
 from .models import RecordType
@@ -36,6 +37,7 @@ class RecordView:
             form = RecordForm(request.POST, instance=record)
             if form.is_valid():
                 record = form.save()
+                messages.success(request, 'Záznam byl úspěšně upraven.')
                 return redirect('record:index')
         else:
             form = RecordForm(instance=record)    
@@ -47,6 +49,7 @@ class RecordView:
             form = RecordForm(request.POST)
             if form.is_valid():
                 record = form.save()
+                messages.success(request, 'Záznam byl úspěšně vytvořen.')
                 return redirect('record:index')
         else:
             form = RecordForm()
@@ -202,6 +205,7 @@ class RecordTypeView:
             if form.is_valid():
                 record = form.save()
                 return redirect('record:types')
+                messages.success(request, 'Typ záznamu byl úspěšně upraven.')
         else:
             form = RecordTypeForm(instance=type)    
     
@@ -212,6 +216,7 @@ class RecordTypeView:
             form = RecordTypeForm(request.POST)
             if form.is_valid():
                 record = form.save()
+                messages.success(request, 'Typ záznamu byl úspěšně vytvořen.')
                 return redirect('record:types')
         else:
             form = RecordTypeForm()
