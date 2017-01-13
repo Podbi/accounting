@@ -13,7 +13,7 @@
             <tbody>
                 {% for type in types %}
                     <tr>
-                        <td>{{ type.name }}</td>
+                        <td><a href="{% url 'record:type_edit' type.id %}">{{ type.name }}</a></td>
                         <td>{{ type.count }}</td>
                     </tr>
                 {% endfor %}

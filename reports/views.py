@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Record
 from .models import RecordType
 from .forms import RecordForm
+from .forms import RecordTypeForm
 from reports.services.monthSummaryCalculator import MonthSummaryCalculator
 from reports.services.monthTranslator import MonthTranslator
 from reports.services.dateFactory import DateFactory
@@ -193,5 +194,27 @@ class RecordTypeView:
         return render(request, 'reports/types.html', {
             'types' : types
         })
+
+    def edit(request, pk):
+        type = get_object_or_404(RecordType, pk=pk)
+        if request.method == 'POST':
+            form = RecordTypeForm(request.POST, instance=type)
+            if form.is_valid():
+                record = form.save()
+                return redirect('record:types')
+        else:
+            form = RecordTypeForm(instance=type)    
+    
+        return render(request, 'reports/type.html', {'form' : form})
+    
+    def create(request):
+        if request.method == 'POST':
+            form = RecordTypeForm(request.POST)
+            if form.is_valid():
+                record = form.save()
+                return redirect('record:types')
+        else:
+            form = RecordTypeForm()
+        return render(request, 'reports/type.html', {'form' : form})
         
         
