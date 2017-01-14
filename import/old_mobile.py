@@ -42,7 +42,7 @@ for line in lines:
 print('')
 print('Celkem bylo nalezeno',len(records),'záznamů, které budou exportovány do CSV souboru')
 
-with open('mobile.csv', 'w') as csvfile:
+with open('mobile.csv', 'w', encoding='utf-8') as csvfile:
     writer = csv.writer(csvfile, delimiter=';')
     writer.writerow(['Import'])
     for record in records:

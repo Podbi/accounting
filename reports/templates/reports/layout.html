@@ -30,7 +30,7 @@
                                                 {{ source.balance }}
                                             </a>
                                         </td>
-                                    {% else %}0 %}
+                                    {% else %}
                                         <td class="alert alert-danger text-center">
                                             <a href="{% url 'record:index' %}">
                                                 {{ source.balance }}
@@ -83,7 +83,7 @@
                 <div class="row">
                     <ul class="messages">
                         {% for message in messages %}
-                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
                         {% endfor %}
                     </ul>
                 </div>
