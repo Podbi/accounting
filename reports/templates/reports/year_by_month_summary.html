@@ -1,0 +1,47 @@
+{% extends 'reports/layout.html' %}
+
+{% block content %}
+    <h2>Roční vyhodnocení pro {{ year }} za jednotlivé měsíce</h2>
+    
+    <table class="table">
+        <colgroup>
+            <col style="width: 70%">
+            <col style="width: 30%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Měsíc</th>
+                <th>Výsledek</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for summary in summaries %}
+                <tr>
+                    <td>{{ summary.month }}</td>
+                    <td
+                        {% if summary.summary.summary >= 0 %}
+                            class="alert alert-success"
+                        {% else %}
+                            class="alert alert-danger"
+                        {% endif %}
+                    >
+                        {{ summary.summary.summary }} {{ summary.summary.currency }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfooter>
+            <tr>
+                <th>Celkem</th>
+                <th
+                    {% if sum >= 0 %}
+                        class="alert alert-success"
+                    {% else %}
+                        class="alert alert-danger"
+                    {% endif %}
+                >{{ sum }} {{ currency }}</th>
+            </tr>
+        </tfooter>
+    </table>
+    
+{% endblock %}

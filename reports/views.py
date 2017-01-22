@@ -103,6 +103,31 @@ class YearSummaryView:
                 'year' : year + 1
             })
         })
+        
+    def byMonth(request, year):
+        calculator = MonthSummaryCalculator()
+        summaries = []
+        sum = 0.00
+        for month in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
+            summary = calculator.calculate(
+                DateFactory().createFirstDayOfMonth(month, int(year)),
+                DateFactory().createLastDayOfMonth(month, int(year)),
+                'CZK'
+            )
+            summaries.append({
+                'month' : MonthTranslator().translate(int(month)),
+                'summary' : summary
+            })
+            sum += summary.summary    
+        
+        year = int(year)
+        
+        return render(request, 'reports/year_by_month_summary.html', {
+            'year' : "%04d" % year, 
+            'sum' : sum,
+            'currency' : 'CZK',
+            'summaries' : summaries
+        })
     
 class MonthView:
     def month(request, year, month):
