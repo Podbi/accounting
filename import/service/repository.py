@@ -62,6 +62,14 @@ class Repository:
         
         return self.cursor.fetchall()
     
+    def findAllByType(self, type):
+        self.cursor.execute(
+            'SELECT date, description, money, source_id FROM reports_record WHERE type_id = ? ORDER BY date ',
+            (type,)
+        )
+        
+        return self.cursor.fetchall()
+    
     def update(self, id, description, place):
         self.cursor.execute(
             'UPDATE reports_record SET description = ?, place = ? WHERE id = ?',

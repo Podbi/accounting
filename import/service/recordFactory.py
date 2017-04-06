@@ -1,4 +1,9 @@
+import re
+
 CURRENCY_CZK = 1
+SOURCE_VALET = 1
+SOURCE_BANK = 2
+SOURCE_HOME = 3
 
 class RecordFactory:
     def create(self, row, date):
