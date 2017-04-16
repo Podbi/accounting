@@ -33,7 +33,7 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
         if row[0] != '' and row[0] != None:
             match = re.search(r'([0-9]+)\.([0-9]+)\.', row[0])
             if match != None:
-                date = datetime.strptime(year + match.group(2) + match.group(1), '%Y%m%d')
+                date = datetime.strptime(year + '-' + match.group(2) + '-' + match.group(1), '%Y-%m-%d')
                 date = date.replace(hour=0, minute=0, second=0)
         
         if len(row) < 5:
