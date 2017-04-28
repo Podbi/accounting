@@ -14,7 +14,7 @@
                 {% for type in types %}
                     <tr>
                         <td><a href="{% url 'record:type_edit' type.id %}">{{ type.name }}</a></td>
-                        <td>{{ type.count }}</td>
+                        <td><a href="{% url 'record:type_list' type.id %}">{{ type.count }}</a></td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -247,4 +247,22 @@ class RecordTypeView:
             form = RecordTypeForm()
         return render(request, 'reports/type.html', {'form' : form})
         
+class TypeView:
+    def list(request, type):
+        type = get_object_or_404(RecordType, pk=type)
+        records = RecordTypeRepository().findAllByType(
+            type.id,
+            'CZK'
+        )
+        
+        summary = 0.00;
+        for record in records:
+            summary += record.money
+        
+        return render(request, 'reports/type_summary.html', {
+            'type' : type, 
+            'records' : records,
+            'summary' : summary,
+            'currency' : 'CZK'
+        })
         

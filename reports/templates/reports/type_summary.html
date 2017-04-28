@@ -1,0 +1,6 @@
+{% extends 'reports/layout.html' %}
+
+{% block content %}
+    <h2>Seznam položek typu {{ type }}</h2>
+    {% include "reports/record/list.html" with records=records summary=summary currency=currency only %}
+{% endblock %}

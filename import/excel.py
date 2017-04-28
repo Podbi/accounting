@@ -8,10 +8,6 @@ import re
 from service.repository import Repository
 from service.recordFactory import RecordFactory
 
-SOURCE_VALET = 1
-SOURCE_BANK = 2
-SOURCE_HOME = 3
-
 if len(sys.argv) < 2:
     raise Exception('Málo vstupních argumentů. Zadej název souboru')
 
@@ -21,7 +17,7 @@ date = ''
 records = []
 filepath = sys.argv[1]
 print('Soubor',filepath,'bude otevřen a zpracován')
-with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
+with open(filepath, 'r', encoding='utf-8-sig', errors='replace') as file:
     reader = csv.reader(file, delimiter=';')
     print('Soubor byl úspěšně otevřen, zahajuji zpracovávání CSV')
     for row in reader:
