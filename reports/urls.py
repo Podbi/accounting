@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^type-month/(?P<type>[0-9]+)/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})$', views.MonthTypeView.type, name='type_month'),
     url(r'^type-year/(?P<type>[0-9]+)/(?P<year>[0-9]{4})$', views.YearTypeView.type, name='type_year'),
     url(r'^type-list/(?P<type>[0-9]+)$', views.TypeView.list, name='type_list'),
-    url(r'^types', views.RecordTypeView.list, name='types')
+    url(r'^types', views.RecordTypeView.list, name='types'),
+    url(r'^search/(?P<query>.*)$', views.RecordSearchView.search, name='search')
 ]

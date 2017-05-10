@@ -1,0 +1,6 @@
+{% extends 'reports/layout.html' %}
+
+{% block content %}
+    <h2>Seznam nalezených položek k výrazu: <strong>{{ query }}</strong></h2>
+    {% include "reports/record/list.html" with records=records summary=summary currency=currency only %}
+{% endblock %}

@@ -266,3 +266,18 @@ class TypeView:
             'currency' : 'CZK'
         })
         
+class RecordSearchView:
+    def search(request, query):
+        records = RecordSummaryRepository().findAllBySearchQuery(query)
+        
+        summary = 0.00;
+        for record in records:
+            summary += record.money
+        
+        return render(request, 'reports/search.html', {
+            'records' : records,
+            'summary' : summary,
+            'query' : query,
+            'currency' : 'CZK'
+        })
+        

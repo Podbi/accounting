@@ -5,12 +5,42 @@
         <link rel="stylesheet" type="text/css" href="{% static 'reports/style.css' %}" />
         <script type="text/javascript" src="{% static 'reports/js/jquery-3.1.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'reports/js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var input = $('[data-component-search]');
+                input.blur(function() {
+                    search(this);
+                });
+                input.keypress(function(event) {
+                   if (event.which == 13) {
+                       search(this);
+                   } 
+                });
+                
+            });
+            
+            /**
+             * @param {HTMLElement} input
+             */
+            function search(input)
+            {
+                if ($(input).val != '') {
+                    window.location.href = $(input).data('component-search') + $(input).val();
+                }
+            }
+        </script>
     </head>
     <body>
         <div class="page-header">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <h1>Domácí účetnictví</h1>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="search-box">Vyhledat:</label>
+                        <input id="search-box" type="text" name="query" class="form-control" value="" data-component-search="{% url 'record:search' query='' %}" />
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <table class="table table-bordered">
