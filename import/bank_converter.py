@@ -18,31 +18,7 @@ filepath = sys.argv[1]
 
 class KnownPaymentsResolver:
     def resolve(self, date, amount):
-        if amount == '-5000,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Monice na bydlení',
-                'Monika Podborská',
-                'pujceni penez'
-            )
-        elif amount == '-1823,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Měsíční Zdravotní Pojištění',
-                'VOZP, Brno',
-                'pracovni vydaj'
-            )
-        elif amount == '-1972,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Měsíční Sociální Zabezpečení',
-                'MSSZ, Brno',
-                'pracovni vydaj'
-            )
-        elif amount == '-1000,00':
+        if amount == '-1000,00':
             return self.createRecord(
                 date,
                 amount,
@@ -58,7 +34,7 @@ class KnownPaymentsResolver:
                 'Trvalý příkaz (ČMSS)',
                 'penzijni pripojisteni'
             )
-        elif amount == '-797,00':
+        elif amount == '-648,00':
             return self.createRecord(
                 date,
                 amount,
@@ -70,19 +46,11 @@ class KnownPaymentsResolver:
             return self.createRecord(
                 date,
                 amount,
-                'Investnční vklad',
+                'Investiční vklad',
                 'Investice Conseq',
                 'investice'
             )
-        elif amount == '-845,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Povinné ručení za Ford C-MAX',
-                'Česká pojišťovna',
-                'doprava'
-            )
-        elif amount == '-728,00':
+        elif amount == '-619,00':
             return self.createRecord(
                 date,
                 amount,
@@ -97,6 +65,38 @@ class KnownPaymentsResolver:
                 'Poplatek za výběr z bankomatu',
                 'KB - Platební účet',
                 'bankovni poplatek'
+            )
+        elif amount == '-39,00':
+            return self.createRecord(
+                date,
+                amount,
+                'Poplatek za vedení účtu/balíčku',
+                'KB - Platební účet',
+                'bankovni poplatek'
+            )
+        elif amount == '-4857,00':
+            return self.createRecord(
+                date,
+                amount,
+                'Bydlení Uzbecká',
+                'SVJ Uzbecká',
+                'bydleni'
+            )
+        elif amount == '-12000,00':
+            return self.createRecord(
+                date,
+                amount,
+                'Převod peněz na Hypotéční účet',
+                'Česká Spořitelna',
+                'bydleni'
+            )
+        elif amount == '-498,00':
+            return self.createRecord(
+                date,
+                amount,
+                'Měsíční Paušál za Mobilní Telefon',
+                'O2',
+                'telefon'
             )
         return None
     
