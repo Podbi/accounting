@@ -1,4 +1,5 @@
 {% extends 'reports/layout.html' %}
+{% load static %}
 
 {% block content %}
     <div class="row">
@@ -7,7 +8,27 @@
     <a href="{{ next }}" class="col-sm-1 btn btn-default h2">Další</a>
     </div>
     
-    <table class="table">
+    <script type="text/javascript" src="{% static 'reports/js/functions.js' %}"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        
+        new Chart($('[data-chart-expense]'), {
+            type: 'pie',
+            data : calculatePieChartData($('[data-table-expense]')),
+            options : {
+                title: true
+            }
+        });
+        
+         new Chart($('[data-chart-revenue]'), {
+            type: 'pie',
+            data : calculatePieChartData($('[data-table-revenue]')),
+            options : {}
+        });
+    });
+    </script>
+    
+    <table class="table" data-table-expense>
         <colgroup>
             <col style="width: 70%">
             <col style="width: 30%">
@@ -20,12 +41,12 @@
         </thead>
         <tbody>
             {% for expense in summary.expenses %}
-                <tr>
-                    <td>
+                <tr data-table-row>
+                    <td data-table-label>
                         {{ expense.name }}
                     </td>
                     <td class="alert alert-danger">
-                       <a href="{% url 'record:type_month' type=expense.type month=monthId year=year %}">{{ expense.amount }} {{ expense.currency }}</a>
+                       <a href="{% url 'record:type_month' type=expense.type month=monthId year=year %}"><span data-table-amount>{{ expense.amount }}</span> {{ expense.currency }}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -44,7 +65,9 @@
         </tfooter>
     </table>
     
-    <table class="table">
+    <canvas data-chart-expense></div>
+    
+    <table class="table" data-table-revenue>
         <colgroup>
             <col style="width: 70%">
             <col style="width: 30%">
@@ -57,12 +80,12 @@
         </thead>
         <tbody>
             {% for revenue in summary.revenues %}
-                <tr>
-                    <td>
+                <tr data-table-row>
+                    <td data-table-label>
                         {{ revenue.name }}
                     </td>
                     <td class="alert alert-success">
-                         <a href="{% url 'record:type_month' type=revenue.type month=monthId year=year %}">{{ revenue.amount }} {{ revenue.currency }}</a>
+                         <a href="{% url 'record:type_month' type=revenue.type month=monthId year=year %}"><span data-table-amount>{{ revenue.amount }}</span> {{ revenue.currency }}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -80,6 +103,9 @@
             </tr>
         </tfooter>
     </table>
+    
+    
+    <canvas data-chart-revenue></div>
     
     <table class="table">
         <colgroup>
