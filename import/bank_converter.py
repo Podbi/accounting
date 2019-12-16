@@ -50,7 +50,7 @@ class KnownPaymentsResolver:
                 'Investice Conseq',
                 'investice'
             )
-        elif amount == '-619,00':
+        elif amount == '-600,00':
             return self.createRecord(
                 date,
                 amount,
@@ -82,7 +82,7 @@ class KnownPaymentsResolver:
                 'SVJ Uzbecká',
                 'bydleni'
             )
-        elif amount == '-12000,00':
+        elif amount == '-12000,00' or amount == '-6000,00':
             return self.createRecord(
                 date,
                 amount,
@@ -97,6 +97,22 @@ class KnownPaymentsResolver:
                 'Měsíční Paušál za Mobilní Telefon',
                 'O2',
                 'telefon'
+            )
+        elif amount == '-6900,00':
+            return self.createRecord(
+                date,
+                amount,
+                'Splátka úvěru Moneta Money Bank za Citroen C4 SpaceTourer',
+                'Moneta Money Bank',
+                'doprava'
+            )
+        elif amount == '-1275,00':
+            return self.createRecord(
+                date,
+                amount,
+                'Povinné ručení a havarijní pojištění Alianz za Citroen C4 SpaceTourer',
+                'Alianz, Pojištění',
+                'doprava'
             )
         return None
     
