@@ -5,6 +5,7 @@ import csv
 import sqlite3
 import re
 from _datetime import date
+from data.knownPayments import knownPayments
 
 CURRENCY_CZK = 1
 SOURCE_VALET = 1
@@ -17,104 +18,45 @@ records = []
 filepath = sys.argv[1]
 
 class KnownPaymentsResolver:
-    def resolve(self, date, amount):
-        if amount == '-1000,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Stavební spoření',
-                'Trvalý příkaz (ČMSS)',
-                'stavebni sporeni'
-            )
-        elif amount == '-300,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Penzijní připojištění',
-                'Trvalý příkaz (ČMSS)',
-                'penzijni pripojisteni'
-            )
-        elif amount == '-648,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Životní pojištění MetLife',
-                'MetLife',
-                'zivotni pojisteni'
-            )
-        elif amount == '-2000,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Investiční vklad',
-                'Investice Conseq',
-                'investice'
-            )
-        elif amount == '-600,00':
-            return self.createRecord(
-                date,
-                amount,
-                'NETBOX Internet + TV',
-                'Uzbecká, Brno',
-                'bydleni'
-            )
-        elif amount == '-9,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Poplatek za výběr z bankomatu',
-                'KB - Platební účet',
-                'bankovni poplatek'
-            )
-        elif amount == '-39,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Poplatek za vedení účtu/balíčku',
-                'KB - Platební účet',
-                'bankovni poplatek'
-            )
-        elif amount == '-4857,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Bydlení Uzbecká',
-                'SVJ Uzbecká',
-                'bydleni'
-            )
-        elif amount == '-12000,00' or amount == '-6000,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Převod peněz na Hypotéční účet',
-                'Česká Spořitelna',
-                'bydleni'
-            )
-        elif amount == '-498,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Měsíční Paušál za Mobilní Telefon',
-                'O2',
-                'telefon'
-            )
-        elif amount == '-6900,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Splátka úvěru Moneta Money Bank za Citroen C4 SpaceTourer',
-                'Moneta Money Bank',
-                'doprava'
-            )
-        elif amount == '-1275,00':
-            return self.createRecord(
-                date,
-                amount,
-                'Povinné ručení a havarijní pojištění Alianz za Citroen C4 SpaceTourer',
-                'Alianz, Pojištění',
-                'doprava'
-            )
+
+    def __init__(self, knownPayments):
+        self._knownPayments = knownPayments
+
+    def resolve(self, date, amount, row):
+        record = self._resolvePaymentByAmount(date, amount)
+        if record:
+            return record
+        record = self._resolvePaymentByIssuerNote(date, amount, row[15])
+        if record:
+            return record
+
         return None
+
+    def _resolvePaymentByAmount(self, date, amount):
+        for knownPayment in self._knownPayments:
+            if amount == knownPayment['amount']:
+                return self.createRecord(
+                    date,
+                    amount,
+                    knownPayment['description'],
+                    knownPayment['place'],
+                    knownPayment['type']
+                )
+
+        return None
+
+    def _resolvePaymentByIssuerNote(self, date, amount, note):
+       for knownPayment in self._knownPayments:
+           if 'note' in knownPayment and note.startswith(knownPayment['note']):
+               return self.createRecord(
+                   date,
+                   amount,
+                   knownPayment['description'],
+                   knownPayment['place'],
+                   knownPayment['type']
+               )
+
+       return None
     
     def createRecord(self, date, amount, description, place, type):
         return [
@@ -128,7 +70,7 @@ class KnownPaymentsResolver:
     def convertAmount(self, amount):
         return int(float(amount.replace(',', '.').replace('+', '')))
 
-resolver = KnownPaymentsResolver()
+resolver = KnownPaymentsResolver(knownPayments)
 
 print('Soubor',filepath,'bude otevřen a zpracován')
 with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
@@ -145,7 +87,7 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
         date = match.group(0)
         amount = row[4]
 
-        record = resolver.resolve(date, amount)
+        record = resolver.resolve(date, amount, row)
         if record != None:
             records.append(record)
         else:
