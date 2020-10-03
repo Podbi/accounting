@@ -21,6 +21,12 @@ database = sqlite3.connect('../db.sqlite3')
 resolver = TypeResolver(database)
 repository = Repository(database)
 
+def shouldNotBeSkipped(description):
+    match = re.search(r'Dixons CarphoneSalary Swap', description)
+    if match != None:
+        return False
+    return True
+
 def formatDate(date):
     match = re.search(r'([0-9]+)\.([0-9]+)\.([0-9]{4})', date)
     if match != None:
@@ -73,16 +79,16 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
         if len(row) < 5:
             raise Exception('Řádek s popisem "{0}" nemá dostatek hodnot'.format(row[3]))
 
-        records.append({
-            'date' : formatDate(row[1]),
-            'money' : formatAmount(row[4]),
-            'currency' : CURRENCY_CZK,
-            'description' : formatDescription(row[2]),
-            'place' : formatPlace(row[2], row[5]),
-            'type' : resolveType(formatAmount(row[4])),
-            'source' : SOURCE_BANK
-        })
-
+        if shouldNotBeSkipped(row[2]) :
+            records.append({
+                'date' : formatDate(row[1]),
+                'money' : formatAmount(row[4]),
+                'currency' : CURRENCY_CZK,
+                'description' : formatDescription(row[2]),
+                'place' : formatPlace(row[2], row[5]),
+                'type' : resolveType(formatAmount(row[4])),
+                'source' : SOURCE_BANK
+            })
 print('')
 print('Celkem bylo nalezeno',len(records),'záznamů, které budou vloženy do databáze')
 print('Vkládám záznamy')
