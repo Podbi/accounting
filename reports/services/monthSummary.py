@@ -9,12 +9,12 @@ class MonthSummary:
         
     def addRevenue(self, record):
         self.revenues.append(record)
-        self.revenue += record.amount
+        self.revenue += round(record.amount, 0)
         self.summary = self.revenue + self.expense
         
     def addExpense(self, record):
         self.expenses.append(record)
-        self.expense += record.amount
+        self.expense += round(record.amount, 0)
         self.summary = self.revenue + self.expense
         
     def sort(self):

@@ -1,9 +1,29 @@
 {% extends 'reports/layout.html' %}
+{% load static %}
 
 {% block content %}
     <h2>Roční vyhodnocení pro {{ year }} za jednotlivé měsíce</h2>
+
+    <script type="text/javascript" src="{% static 'reports/js/functions.js' %}"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+
+        new Chart($('[data-chart-summary]'), {
+            type: 'bar',
+            data : calculateBarChartData($('[data-table-summary]'), "Roční vyhodnocení za jednotlivé měsíce"),
+            options : {
+                title: true,
+                plugins: {
+                    labels: {
+                        render: 'value'
+                    }
+                }
+            }
+        });
+    });
+    </script>
     
-    <table class="table">
+    <table class="table" data-table-summary>
         <colgroup>
             <col style="width: 70%">
             <col style="width: 30%">
@@ -16,9 +36,9 @@
         </thead>
         <tbody>
             {% for summary in summaries %}
-                <tr>
-                    <td>{{ summary.month }}</td>
-                    <td
+                <tr data-table-row>
+                    <td data-table-label>{{ summary.month }}</td>
+                    <td data-table-amount
                         {% if summary.summary.summary >= 0 %}
                             class="alert alert-success"
                         {% else %}
@@ -43,5 +63,7 @@
             </tr>
         </tfooter>
     </table>
+
+    <canvas data-chart-summary>
     
 {% endblock %}

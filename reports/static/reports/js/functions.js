@@ -34,3 +34,31 @@ function calculatePieChartData(tableElement)
         }]
     }
 }
+
+function calculateBarChartData(tableElement, label)
+{
+    var labels = [];
+    var data = [];
+    var colors = [];
+
+    $(tableElement).find('[data-table-row]').each(function(index, element) {
+        labels.push($(element).find('[data-table-label]').text());
+        var amount = sanitizeAmount($(element).find('[data-table-amount]').text());
+        data.push(amount);
+        if (amount > 0) {
+            colors.push("#dff0d8");
+        } else {
+            colors.push("#f2dede");
+        }
+    });
+
+    return {
+        labels : labels,
+        datasets : [{
+            label : label,
+            data : data,
+            borderWidth : 1,
+            backgroundColor: colors
+        }]
+    }
+}

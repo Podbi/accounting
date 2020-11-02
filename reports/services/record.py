@@ -5,6 +5,6 @@ class Record:
         self.description = description
         self.place = place
         self.type = type
-        self.money = money
+        self.money = round(money, 0)
         self.currency = currency
         self.source = source

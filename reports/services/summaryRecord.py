@@ -2,7 +2,7 @@ class SummaryRecord:
     def __init__(self, type, name, amount, currency):
         self.type = type
         self.name = name
-        self.amount = amount
+        self.amount = round(amount, 0)
         self.currency = currency
         
     def __repr__(self):

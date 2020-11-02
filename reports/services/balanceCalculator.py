@@ -19,7 +19,7 @@ class BalanceCalculator:
         for row in rows:
             balance.append({
                 'name' : row[0],
-                'balance' : row[1]
+                'balance' : round(row[1], 0)
             })
         
         return balance

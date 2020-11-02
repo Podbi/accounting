@@ -47,7 +47,7 @@ class KnownPaymentsResolver:
 
     def _resolvePaymentByIssuerNote(self, date, amount, note):
        for knownPayment in self._knownPayments:
-           if 'note' in knownPayment and note.startswith(knownPayment['note']):
+           if 'note' in knownPayment and note.lower().startswith(knownPayment['note'].lower()):
                return self.createRecord(
                    date,
                    amount,
