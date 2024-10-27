@@ -57,6 +57,11 @@ class KnownPaymentsResolver:
                )
 
        return None
+
+    def resolvePlace(self, identification, description):
+        if not identification or re.search(r'\d{8}', identification):
+            return re.sub(r'\s+$', '', description)
+        return re.sub(r'\s+$', '', identification)
     
     def createRecord(self, date, amount, description, place, type):
         return [
@@ -96,7 +101,7 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
                     date,
                     amount,
                     row[13],
-                    row[3],
+                    resolver.resolvePlace(row[13], row[15]),
                     None,
                 )
             )

@@ -8,7 +8,7 @@ class YearSummaryCalculator:
             cursor.execute("""
                 SELECT DISTINCT substr(date, 0, 5) AS year
                 FROM reports_record 
-                ORDER BY year
+                ORDER BY year DESC
             """
             )
             rows = cursor.fetchall()

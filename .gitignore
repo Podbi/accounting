@@ -38,6 +38,7 @@ $RECYCLE.BIN/
 .TemporaryItems
 .Trashes
 .VolumeIcon.icns
+reports/
 
 # Directories potentially created on remote AFP share
 .AppleDB
@@ -47,6 +48,6 @@ Temporary Items
 .apdisk
 db.sqlite3
 .settings/org.eclipse.core.resources.prefs
-__pycache__/
+**/__pycache__/
 __pycache__\
 *.pyc

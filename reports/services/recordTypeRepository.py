@@ -14,11 +14,13 @@ class RecordTypeRepository:
                     type.name AS type,
                     record.money,
                     currency.code AS currency,
-                    source.name AS source
+                    source.name AS source,
+                    category.name AS category
                 FROM reports_record AS record 
                 JOIN reports_currency AS currency ON record.currency_id = currency.id 
                 JOIN reports_recordtype AS type ON record.type_id = type.id
                 JOIN reports_moneysource AS source ON record.source_id = source.id 
+                LEFT JOIN reports_recordcategory AS category ON record.category_id = category.id
                 WHERE record.date >= %s AND record.date <= %s AND currency.code = %s AND type.id = %s
                 ORDER BY record.date DESC
                 """,
@@ -42,7 +44,8 @@ class RecordTypeRepository:
                     row[4],
                     row[5],
                     row[6],
-                    row[7]
+                    row[7],
+                    row[8]
                 )
            )
         
@@ -59,11 +62,13 @@ class RecordTypeRepository:
                     type.name AS type,
                     record.money,
                     currency.code AS currency,
-                    source.name AS source
+                    source.name AS source,
+                    category.name As category,
                 FROM reports_record AS record 
                 JOIN reports_currency AS currency ON record.currency_id = currency.id 
                 JOIN reports_recordtype AS type ON record.type_id = type.id
                 JOIN reports_moneysource AS source ON record.source_id = source.id 
+                LEFT JOIN reports_recordcategory AS category ON record.category_id = category.id
                 WHERE currency.code = %s AND type.id = %s
                 ORDER BY record.date DESC
                 """,
@@ -85,7 +90,8 @@ class RecordTypeRepository:
                     row[4],
                     row[5],
                     row[6],
-                    row[7]
+                    row[7],
+                    row[8]
                 )
            )
         

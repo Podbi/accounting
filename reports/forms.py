@@ -6,7 +6,7 @@ from .models import RecordType
 class RecordForm(ModelForm):
     class Meta:
         model = Record
-        fields = ['date', 'description', 'place', 'type', 'money', 'currency', 'source']
+        fields = ['date', 'description', 'place', 'type', 'money', 'currency', 'source', 'category']
 
 class RecordTypeForm(ModelForm):
     class Meta:

@@ -7,6 +7,7 @@
                 <th>Místo</th>
                 <th>Typ</th>
                 <th>Částka</th>
+                <th>Kategorie</th>
                 <th>Zdroj</th>
             </tr>
         </thead>
@@ -29,6 +30,13 @@
                         {% endif %}
                     >
                         {{ record.money }} {{ record.currency }}
+                    </td>
+                    <td>
+                        {% if record.category %}
+                            {{ record.category }}
+                        {% else %}
+                            ---
+                        {% endif %}
                     </td>
                     <td>{{ record.source }}</td>
                 </tr>

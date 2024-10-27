@@ -29,6 +29,13 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='RecordCategory',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=255)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Record',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -38,6 +45,7 @@ class Migration(migrations.Migration):
                 ('money', models.FloatField()),
                 ('currency', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='reports.Currency')),
                 ('source', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='reports.MoneySource')),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='reports.RecordCategory', null=True)),
             ],
         ),
         migrations.CreateModel(

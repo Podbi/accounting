@@ -36,7 +36,10 @@
         <thead>
             <tr>
                 <th>Výdaje</th>
-                <th>Částka</th>
+                <th>Celková Částka</th>
+                <th>Nutné</th>
+                <th>Navíc</th>
+                <th>Spoření</th>
             </tr>
         </thead>
         <tbody>
@@ -46,7 +49,24 @@
                         {{ expense.name }}
                     </td>
                     <td class="alert alert-danger">
-                       <a href="{% url 'record:type_month' type=expense.type month=monthId year=year %}"><span data-table-amount>{{ expense.amount }}</span> {{ expense.currency }}</a>
+                       <a href="{% url 'record:type_month' type=expense.type month=monthId year=year %}">
+                           <span data-table-amount>{{ expense.amount }}</span> {{ expense.currency }}
+                       </a>
+                    </td>
+                    <td class="alert alert-danger">
+                       <a href="{% url 'record:type_month' type=expense.type month=monthId year=year %}">
+                           <span data-table-necessity-amount>{{ expense.necessity_amount|default:"---" }}</span> {{ expense.currency }}
+                       </a>
+                    </td>
+                    <td class="alert alert-danger">
+                       <a href="{% url 'record:type_month' type=expense.type month=monthId year=year %}">
+                           <span data-table-nice-amount>{{ expense.nice_amount|default:"---"  }}</span> {{ expense.currency }}
+                       </a>
+                    </td>
+                    <td class="alert alert-danger">
+                       <a href="{% url 'record:type_month' type=expense.type month=monthId year=year %}">
+                           <span data-table-saving-amount>{{ expense.saving_amount|default:"---"  }}</span> {{ expense.currency }}
+                       </a>
                     </td>
                 </tr>
             {% endfor %}
@@ -59,6 +79,21 @@
                 <th class="alert alert-danger">
                      <a href="{% url 'record:month' month=monthId year=year %}">
                         {{ summary.expense }} {{ summary.currency }}
+                    </a>
+                </th>
+                <th class="alert alert-danger">
+                     <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summary.categorized_expense.necessity|default:"---" }} {{ summary.currency }}
+                    </a>
+                </th>
+                <th class="alert alert-danger">
+                     <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summary.categorized_expense.nice|default:"---" }} {{ summary.currency }}
+                    </a>
+                </th>
+                <th class="alert alert-danger">
+                     <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summary.categorized_expense.saving|default:"---" }} {{ summary.currency }}
                     </a>
                 </th>
             </tr>
@@ -76,6 +111,9 @@
             <tr>
                 <th>Příjmy</th>
                 <th>Částka</th>
+                <th>Nutné</th>
+                <th>Navíc</th>
+                <th>Spoření</th>
             </tr>
         </thead>
         <tbody>
@@ -86,6 +124,21 @@
                     </td>
                     <td class="alert alert-success">
                          <a href="{% url 'record:type_month' type=revenue.type month=monthId year=year %}"><span data-table-amount>{{ revenue.amount }}</span> {{ revenue.currency }}</a>
+                    </td>
+                    <td class="alert alert-success">
+                       <a href="{% url 'record:type_month' type=revenue.type month=monthId year=year %}">
+                           <span data-table-necessity-amount>{{ revenue.necessity_amount|default:"---" }}</span> {{ revenue.currency }}
+                       </a>
+                    </td>
+                    <td class="alert alert-success">
+                       <a href="{% url 'record:type_month' type=revenue.type month=monthId year=year %}">
+                           <span data-table-nice-amount>{{ revenue.nice_amount|default:"---"  }}</span> {{ revenue.currency }}
+                       </a>
+                    </td>
+                    <td class="alert alert-success">
+                       <a href="{% url 'record:type_month' type=revenue.type month=monthId year=year %}">
+                           <span data-table-saving-amount>{{ revenue.saving_amount|default:"---"  }}</span> {{ revenue.currency }}
+                       </a>
                     </td>
                 </tr>
             {% endfor %}
@@ -98,6 +151,21 @@
                 <th class="alert alert-success">
                      <a href="{% url 'record:month' month=monthId year=year %}">
                         {{ summary.revenue }} {{ summary.currency }}
+                    </a>
+                </th>
+                <th class="alert alert-success">
+                     <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summary.categorized_revenue.necessity|default:"---" }} {{ summary.currency }}
+                    </a>
+                </th>
+                <th class="alert alert-success">
+                     <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summary.categorized_revenue.nice|default:"---" }} {{ summary.currency }}
+                    </a>
+                </th>
+                <th class="alert alert-success">
+                     <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summary.categorized_revenue.saving|default:"---" }} {{ summary.currency }}
                     </a>
                 </th>
             </tr>
@@ -126,7 +194,43 @@
                     <a href="{% url 'record:month' month=monthId year=year %}">
                         {{ summary.summary }} {{ summary.currency }}
                     </a>
-                <th>
+                </th>
+
+                <th
+                    {% if summary.categorized_summary.necessity >= 0 %}
+                        class="alert alert-success"
+                    {% else %}
+                        class="alert alert-danger"
+                    {% endif %}
+                >
+                    <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summarycategorized_summary.necessity|default:"---" }} {{ summary.currency }}
+                    </a>
+                </th>
+
+                <th
+                    {% if summary.categorized_summary.nice >= 0 %}
+                        class="alert alert-success"
+                    {% else %}
+                        class="alert alert-danger"
+                    {% endif %}
+                >
+                    <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summarycategorized_summary.nice|default:"---" }} {{ summary.currency }}
+                    </a>
+                </th>
+
+                <th
+                    {% if summary.categorized_summary.saving >= 0 %}
+                        class="alert alert-success"
+                    {% else %}
+                        class="alert alert-danger"
+                    {% endif %}
+                >
+                    <a href="{% url 'record:month' month=monthId year=year %}">
+                        {{ summarycategorized_summary.saving|default:"---" }} {{ summary.currency }}
+                    </a>
+                </th>
             </tr>
         </thead>
     </tbody>

@@ -8,11 +8,11 @@ from reports.models import RecordType
 from reports.models import Currency
 from reports.models import MoneySource
 
-def create_record(description, money, date):
+def create_record(description, money, date, category=None):
     currency = Currency.objects.create(code="CZK")
     type = RecordType.objects.create()
     source = MoneySource.objects.create()
-    return Record.objects.create(description=description, date=date, money=money, currency=currency, source=source, type=type)
+    return Record.objects.create(description=description, date=date, money=money, currency=currency, source=source, type=type, category=category)
 
 class RecordSummaryRepositoryTests(TestCase):
     def test_finds_all_by_dates(self):

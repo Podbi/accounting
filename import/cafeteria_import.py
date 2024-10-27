@@ -1,4 +1,4 @@
-#  -*- coding: utf-8 -*-
+﻿#  -*- coding: utf-8 -*-
 from datetime import datetime
 import sys
 import csv
@@ -30,7 +30,10 @@ def shouldNotBeSkipped(description):
 def formatDate(date):
     match = re.search(r'([0-9]+)\.([0-9]+)\.([0-9]{4})', date)
     if match != None:
-        date = datetime.strptime(match.group(3) + match.group(2) + match.group(1), '%Y%m%d')
+        month = match.group(2)
+        if len(month) != 2:
+            month = "0" + month
+        date = datetime.strptime(match.group(3) + month + match.group(1), '%Y%m%d')
         return date.replace(hour=0, minute=0, second=0)
     else:
         match = re.search(r'([0-9]+)/([0-9]+)/([0-9]{4})', date)
@@ -52,9 +55,10 @@ def formatDescription(description):
     return ' '.join(description.split())
 
 def formatAmount(amount):
-    match = re.search(r'((-)?[0-9,]+\.[0-9]*)', amount)
+    amount = amount.replace(u'\xa0', u' ')
+    match = re.search(r'((-)?[0-9 ]+\,[0-9]*)', amount)
     if match != None:
-        return float(re.sub(r',', '', match.group(1)))
+        return float(match.group(1).replace(',','.').replace(' ',''))
     raise Exception('Částka "{0}" není ve správném formátu.'.format(amount))
 
 def formatPlace(description, place):
@@ -76,6 +80,7 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
 
     next(reader)
     for row in reader:
+
         if len(row) < 5:
             raise Exception('Řádek s popisem "{0}" nemá dostatek hodnot'.format(row[3]))
 
@@ -85,7 +90,7 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
                 'money' : formatAmount(row[4]),
                 'currency' : CURRENCY_CZK,
                 'description' : formatDescription(row[2]),
-                'place' : formatPlace(row[2], row[5]),
+                'place' : formatDescription(row[2]),
                 'type' : resolveType(formatAmount(row[4])),
                 'source' : SOURCE_BANK
             })
@@ -106,9 +111,9 @@ for record in records:
             record['source'],
             record['type']
         )
+
         counter = counter + 1
         print('.', end='')
-        
 repository.commit()
 print('')
 print(counter,'záznamů bylo úspěšně vloženo')

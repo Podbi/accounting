@@ -137,7 +137,7 @@ class MonthView:
             'CZK'
         )
         
-        summary = 0.00;
+        summary = 0.00
         for record in records:
             summary += record.money
         
@@ -160,7 +160,7 @@ class MonthTypeView:
             'CZK'
         )
         
-        summary = 0.00;
+        summary = 0.00
         for record in records:
             summary += record.money
         
@@ -182,7 +182,7 @@ class YearView:
             'CZK'
         )
         
-        summary = 0.00;
+        summary = 0.00
         for record in records:
             summary += record.money
         
@@ -203,7 +203,7 @@ class YearTypeView:
             'CZK'
         )
         
-        summary = 0.00;
+        summary = 0.00
         for record in records:
             summary += record.money
         
@@ -255,7 +255,7 @@ class TypeView:
             'CZK'
         )
         
-        summary = 0.00;
+        summary = 0.00
         for record in records:
             summary += record.money
         
@@ -270,7 +270,7 @@ class RecordSearchView:
     def search(request, query):
         records = RecordSummaryRepository().findAllBySearchQuery(query)
         
-        summary = 0.00;
+        summary = 0.00
         for record in records:
             summary += record.money
         
