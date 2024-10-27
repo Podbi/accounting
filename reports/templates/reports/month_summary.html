@@ -1,5 +1,6 @@
 {% extends 'reports/layout.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
     <div class="row">
@@ -30,8 +31,11 @@
     
     <table class="table" data-table-expense>
         <colgroup>
-            <col style="width: 70%">
-            <col style="width: 30%">
+            <col style="width: 40%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+            <col style="width: 15%">
         </colgroup>
         <thead>
             <tr>
@@ -55,17 +59,17 @@
                     </td>
                     <td class="alert alert-danger">
                        <a href="{% url 'record:type_month' type=expense.type month=monthId year=year %}">
-                           <span data-table-necessity-amount>{{ expense.necessity_amount|default:"---" }}</span> {{ expense.currency }}
+                           <span data-table-necessity-amount>{{ expense.necessity_amount|default:"---" }}</span> {{ expense.currency }} <br/>({{ expense.necessity_amount|percentage:expense.amount }} %)
                        </a>
                     </td>
                     <td class="alert alert-danger">
                        <a href="{% url 'record:type_month' type=expense.type month=monthId year=year %}">
-                           <span data-table-nice-amount>{{ expense.nice_amount|default:"---"  }}</span> {{ expense.currency }}
+                           <span data-table-nice-amount>{{ expense.nice_amount|default:"---"  }}</span> {{ expense.currency }} <br/>({{ expense.nice_amount|percentage:expense.amount }} %)
                        </a>
                     </td>
                     <td class="alert alert-danger">
                        <a href="{% url 'record:type_month' type=expense.type month=monthId year=year %}">
-                           <span data-table-saving-amount>{{ expense.saving_amount|default:"---"  }}</span> {{ expense.currency }}
+                           <span data-table-saving-amount>{{ expense.saving_amount|default:"---"  }}</span> {{ expense.currency }} <br/>({{ expense.saving_amount|percentage:expense.amount }} %)
                        </a>
                     </td>
                 </tr>
@@ -83,29 +87,32 @@
                 </th>
                 <th class="alert alert-danger">
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_expense.necessity|default:"---" }} {{ summary.currency }}
+                        {{ summary.categorized_expense.necessity|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_expense.necessity|percentage:summary.expense }} %)
                     </a>
                 </th>
                 <th class="alert alert-danger">
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_expense.nice|default:"---" }} {{ summary.currency }}
+                        {{ summary.categorized_expense.nice|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_expense.nice|percentage:summary.expense }} %)
                     </a>
                 </th>
                 <th class="alert alert-danger">
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_expense.saving|default:"---" }} {{ summary.currency }}
+                        {{ summary.categorized_expense.saving|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_expense.saving|percentage:summary.expense }} %)
                     </a>
                 </th>
             </tr>
         </tfooter>
     </table>
     
-    <canvas data-chart-expense></div>
+    <canvas data-chart-expense/></div>
     
     <table class="table" data-table-revenue>
         <colgroup>
-            <col style="width: 70%">
-            <col style="width: 30%">
+            <col style="width: 40%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+            <col style="width: 15%">
         </colgroup>
         <thead>
             <tr>
@@ -127,17 +134,17 @@
                     </td>
                     <td class="alert alert-success">
                        <a href="{% url 'record:type_month' type=revenue.type month=monthId year=year %}">
-                           <span data-table-necessity-amount>{{ revenue.necessity_amount|default:"---" }}</span> {{ revenue.currency }}
+                           <span data-table-necessity-amount>{{ revenue.necessity_amount|default:"---" }}</span> {{ revenue.currency }} <br/>({{ revenue.necessity_amount|percentage:revenue.amount }} %)
                        </a>
                     </td>
                     <td class="alert alert-success">
                        <a href="{% url 'record:type_month' type=revenue.type month=monthId year=year %}">
-                           <span data-table-nice-amount>{{ revenue.nice_amount|default:"---"  }}</span> {{ revenue.currency }}
+                           <span data-table-nice-amount>{{ revenue.nice_amount|default:"---"  }}</span> {{ revenue.currency }} <br/>({{ revenue.nice_amount|percentage:revenue.amount }} %)
                        </a>
                     </td>
                     <td class="alert alert-success">
                        <a href="{% url 'record:type_month' type=revenue.type month=monthId year=year %}">
-                           <span data-table-saving-amount>{{ revenue.saving_amount|default:"---"  }}</span> {{ revenue.currency }}
+                           <span data-table-saving-amount>{{ revenue.saving_amount|default:"---"  }}</span> {{ revenue.currency }} <br/>({{ revenue.saving_amount|percentage:revenue.amount }} %)
                        </a>
                     </td>
                 </tr>
@@ -155,17 +162,17 @@
                 </th>
                 <th class="alert alert-success">
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_revenue.necessity|default:"---" }} {{ summary.currency }}
+                        {{ summary.categorized_revenue.necessity|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_revenue.necessity|percentage:summary.revenue }} %)
                     </a>
                 </th>
                 <th class="alert alert-success">
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_revenue.nice|default:"---" }} {{ summary.currency }}
+                        {{ summary.categorized_revenue.nice|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_revenue.nice|percentage:summary.revenue }} %)
                     </a>
                 </th>
                 <th class="alert alert-success">
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_revenue.saving|default:"---" }} {{ summary.currency }}
+                        {{ summary.categorized_revenue.saving|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_revenue.saving|percentage:summary.revenue }} %)
                     </a>
                 </th>
             </tr>
@@ -173,12 +180,15 @@
     </table>
     
     
-    <canvas data-chart-revenue></div>
+    <canvas data-chart-revenue/></div>
     
     <table class="table">
         <colgroup>
-            <col style="width: 70%">
-            <col style="width: 30%">
+            <col style="width: 40%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+            <col style="width: 15%">
         </colgroup>
         <thead>
             <tr>
@@ -204,7 +214,7 @@
                     {% endif %}
                 >
                     <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summarycategorized_summary.necessity|default:"---" }} {{ summary.currency }}
+                        {{ summary.categorized_summary.necessity|default:"---" }} {{ summary.currency }}
                     </a>
                 </th>
 
@@ -216,7 +226,7 @@
                     {% endif %}
                 >
                     <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summarycategorized_summary.nice|default:"---" }} {{ summary.currency }}
+                        {{ summary.categorized_summary.nice|default:"---" }} {{ summary.currency }}
                     </a>
                 </th>
 
@@ -228,10 +238,11 @@
                     {% endif %}
                 >
                     <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summarycategorized_summary.saving|default:"---" }} {{ summary.currency }}
+                        {{ summary.categorized_summary.saving|default:"---" }} {{ summary.currency }}
                     </a>
                 </th>
             </tr>
         </thead>
     </tbody>
+    </table>
 {% endblock %}
