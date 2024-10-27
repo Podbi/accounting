@@ -14,17 +14,23 @@
     $(document).ready(function(){
         
         new Chart($('[data-chart-expense]'), {
-            type: 'pie',
+            type: 'horizontalBar',
             data : calculatePieChartData($('[data-table-expense]')),
             options : {
+                responsive: true,
                 title: true
-            }
+            },
+            label: "Výdaje"
         });
         
          new Chart($('[data-chart-revenue]'), {
-            type: 'pie',
+            type: 'horizontalBar',
             data : calculatePieChartData($('[data-table-revenue]')),
-            options : {}
+            options : {
+                responsive: true,
+                title: true
+            },
+            label: "Příjmy"
         });
     });
     </script>
