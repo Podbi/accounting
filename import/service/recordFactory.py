@@ -50,5 +50,6 @@ class RecordFactory:
             'currency': currency,
             'description' : row['description'],
             'type' : row['type'],
-            'source' : source
+            'source' : source,
+            'category' : row['category']
         }
