@@ -12,7 +12,7 @@ function generateRandonColour()
     return "rgb(" + r + "," + g + "," + b + ")";
 }
 
-function calculatePieChartData(tableElement)
+function calculateChartData(tableElement)
 {
     var labels = [];
     var data = [];

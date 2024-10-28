@@ -15,7 +15,7 @@
         
         new Chart($('[data-chart-expense]'), {
             type: 'horizontalBar',
-            data : calculatePieChartData($('[data-table-expense]')),
+            data : calculateChartData($('[data-table-expense]')),
             options : {
                 responsive: true,
                 title: true
@@ -25,7 +25,7 @@
         
          new Chart($('[data-chart-revenue]'), {
             type: 'horizontalBar',
-            data : calculatePieChartData($('[data-table-revenue]')),
+            data : calculateChartData($('[data-table-revenue]')),
             options : {
                 responsive: true,
                 title: true
