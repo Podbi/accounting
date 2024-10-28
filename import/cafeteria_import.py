@@ -81,7 +81,7 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
     next(reader)
     for row in reader:
 
-        if len(row) < 5:
+        if len(row) < 6:
             raise Exception('Řádek s popisem "{0}" nemá dostatek hodnot'.format(row[3]))
 
         if shouldNotBeSkipped(row[2]) :
@@ -92,7 +92,8 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
                 'description' : formatDescription(row[2]),
                 'place' : formatDescription(row[2]),
                 'type' : resolveType(formatAmount(row[4])),
-                'source' : SOURCE_BANK
+                'source' : SOURCE_BANK,
+                'category' : row[5]
             })
 print('')
 print('Celkem bylo nalezeno',len(records),'záznamů, které budou vloženy do databáze')
@@ -109,7 +110,8 @@ for record in records:
             record['money'],
             record['currency'],
             record['source'],
-            record['type']
+            record['type'],
+            record['category']
         )
 
         counter = counter + 1

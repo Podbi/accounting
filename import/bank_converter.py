@@ -40,36 +40,39 @@ class KnownPaymentsResolver:
                     amount,
                     knownPayment['description'],
                     knownPayment['place'],
-                    knownPayment['type']
+                    knownPayment['type'],
+                    knownPayment['category']
                 )
 
         return None
 
     def _resolvePaymentByIssuerNote(self, date, amount, note):
-       for knownPayment in self._knownPayments:
-           if 'note' in knownPayment and note.lower().startswith(knownPayment['note'].lower()):
-               return self.createRecord(
-                   date,
-                   amount,
-                   knownPayment['description'],
-                   knownPayment['place'],
-                   knownPayment['type']
-               )
+        for knownPayment in self._knownPayments:
+            if 'note' in knownPayment and note.lower().startswith(knownPayment['note'].lower()):
+                return self.createRecord(
+                    date,
+                    amount,
+                    knownPayment['description'],
+                    knownPayment['place'],
+                    knownPayment['type'],
+                    knownPayment['category']
+                )
 
-       return None
+        return None
 
     def resolvePlace(self, identification, description):
         if not identification or re.search(r'\d{8}', identification):
             return re.sub(r'\s+$', '', description)
         return re.sub(r'\s+$', '', identification)
     
-    def createRecord(self, date, amount, description, place, type):
+    def createRecord(self, date, amount, description, place, type, category):
         return [
             date,
             self.convertAmount(amount),
             description,
             place,
-            type
+            type,
+            category
         ]
         
     def convertAmount(self, amount):
@@ -103,6 +106,7 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
                     row[13],
                     resolver.resolvePlace(row[13], row[15]),
                     None,
+                    None
                 )
             )
 

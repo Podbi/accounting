@@ -28,7 +28,8 @@ with open(filepath, 'r', encoding='utf-8-sig', errors='replace') as file:
             'valet': row[2],
             'home': row[3],
             'description': row[6],
-            'type': row[9]
+            'type': row[9],
+            'category' : row[10]
         }
         if (row['description'] == ''):
             continue
@@ -54,6 +55,7 @@ for record in records:
             print('')
             print('Vkládám nový typ záznamu',record['type'])
             record['type'] = repository.createType(record['type'])
+
         repository.createRecord(
             record['date'],
             record['description'],
@@ -61,7 +63,8 @@ for record in records:
             record['money'],
             record['currency'],
             record['source'],
-            record['type']
+            record['type'],
+            record['category']
         )
         counter = counter + 1
         print('.', end='')

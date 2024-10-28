@@ -45,7 +45,8 @@ for record in records:
                 'description' : record['description'],
                 'place' : PLACE_BANK,
                 'type' : ATM_WITHDRAW_TYPE,
-                'source' : SOURCE_VALET
+                'source' : SOURCE_VALET,
+                'category' : None
             })
 
 print('')
@@ -63,7 +64,8 @@ for record in newRecords:
             record['money'],
             record['currency'],
             record['source'],
-            record['type']
+            record['type'],
+            record['category']
         )
         counter = counter + 1
         print('.', end='')

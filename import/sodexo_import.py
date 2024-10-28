@@ -58,7 +58,8 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
             'description' : description,
             'place' : place,
             'type' : resolver.resolve('stravovani'),
-            'source' : SOURCE_VALET
+            'source' : SOURCE_VALET,
+            'category' : 1
         })
 
 print('')
@@ -77,7 +78,8 @@ for record in records:
             record['money'],
             record['currency'],
             record['source'],
-            record['type']
+            record['type'],
+            record['category']
         )
         counter = counter + 1
         print('.', end='')

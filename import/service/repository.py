@@ -17,17 +17,18 @@ class Repository:
         
         return (self.cursor.fetchone() != None)
     
-    def createRecord(self, date, description, place, money, currency, source, type):
+    def createRecord(self, date, description, place, money, currency, source, type, category):
         self.cursor.execute(
-            'INSERT INTO reports_record(date, description, place, money, currency_id, source_id, type_id) VALUES(?, ?, ?, ?, ?, ?, ?)',
+            'INSERT INTO reports_record(date, description, place, money, currency_id, source_id, type_id, category_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
             (
-               date,
-               description,
-               place,
-               money,
-               currency,
-               source,
-               type
+                date,
+                description,
+                place,
+                money,
+                currency,
+                source,
+                type,
+                category
             )
         )
     

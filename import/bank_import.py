@@ -36,7 +36,7 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
                 date = datetime.strptime(year + match.group(2) + match.group(1), '%Y%m%d')
                 date = date.replace(hour=0, minute=0, second=0)
         
-        if len(row) < 5:
+        if len(row) < 6:
             raise Exception('Řádek s popisem "{0}" nemá dostatek hodnot'.format(row[2]))
         
         records.append({
@@ -46,7 +46,8 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
             'description' : row[2],
             'place' : row[3],
             'type' : resolver.resolve(row[4]),
-            'source' : SOURCE_BANK
+            'source' : SOURCE_BANK,
+            'category' : row[5]
         })
 
 print('')
@@ -64,7 +65,8 @@ for record in records:
             record['money'],
             record['currency'],
             record['source'],
-            record['type']
+            record['type'],
+            record['category']
         )
         counter = counter + 1
         print('.', end='')
