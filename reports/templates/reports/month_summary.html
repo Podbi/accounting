@@ -15,22 +15,38 @@
         
         new Chart($('[data-chart-expense]'), {
             type: 'horizontalBar',
-            data : calculateChartData($('[data-table-expense]')),
+            data : calculateChartData($('[data-table-expense]'), "Výdaje"),
             options : {
                 responsive: true,
                 title: true
-            },
-            label: "Výdaje"
+            }
+        });
+
+        new Chart($('[data-chart-expense-debrief]'), {
+            type: 'bar',
+            data : calculateChartData($('[data-table-expense]'), "Poměr Výdajů", "[data-table-summary-row]"),
+            options : {
+                responsive: true,
+                title: true
+            }
         });
         
          new Chart($('[data-chart-revenue]'), {
             type: 'horizontalBar',
-            data : calculateChartData($('[data-table-revenue]')),
+            data : calculateChartData($('[data-table-revenue]'), "Příjmy"),
             options : {
                 responsive: true,
                 title: true
-            },
-            label: "Příjmy"
+            }
+        });
+
+        new Chart($('[data-chart-revenue-debrief]'), {
+            type: 'bar',
+            data : calculateChartData($('[data-table-revenue]'), "Poměr Příjmů", "[data-table-summary-row]"),
+            options : {
+                responsive: true,
+                title: true
+            }
         });
     });
     </script>
@@ -88,22 +104,25 @@
                 </th>
                 <th class="alert alert-danger">
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.expense }} {{ summary.currency }}
+                        <span>{{ summary.expense }}</span> {{ summary.currency }}
                     </a>
                 </th>
-                <th class="alert alert-danger">
+                <th class="alert alert-danger" data-table-summary-row>
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_expense.necessity|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_expense.necessity|percentage:summary.expense }} %)
+                        <span data-table-amount>{{ summary.categorized_expense.necessity|default:"---" }}</span> {{ summary.currency }}
+                         <br/><span data-table-label>({{ summary.categorized_expense.necessity|percentage:summary.expense }} %)</span>
                     </a>
                 </th>
-                <th class="alert alert-danger">
+                <th class="alert alert-danger" data-table-summary-row>
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_expense.nice|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_expense.nice|percentage:summary.expense }} %)
+                        <span data-table-amount>{{ summary.categorized_expense.nice|default:"---" }}</span> {{ summary.currency }}
+                         <br/><span data-table-label>({{ summary.categorized_expense.nice|percentage:summary.expense }} %)</span>
                     </a>
                 </th>
-                <th class="alert alert-danger">
+                <th class="alert alert-danger" data-table-summary-row>
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_expense.saving|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_expense.saving|percentage:summary.expense }} %)
+                        <span data-table-amount>{{ summary.categorized_expense.saving|default:"---" }}</span> {{ summary.currency }}
+                         <br/><span data-table-label>({{ summary.categorized_expense.saving|percentage:summary.expense }} %)</span>
                     </a>
                 </th>
             </tr>
@@ -111,6 +130,8 @@
     </table>
     
     <canvas data-chart-expense/></div>
+
+    <canvas data-chart-expense-debrief/></div>
     
     <table class="table" data-table-revenue>
         <colgroup>
@@ -166,19 +187,22 @@
                         {{ summary.revenue }} {{ summary.currency }}
                     </a>
                 </th>
-                <th class="alert alert-success">
+                <th class="alert alert-success" data-table-summary-row>
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_revenue.necessity|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_revenue.necessity|percentage:summary.revenue }} %)
+                        <span data-table-amount>{{ summary.categorized_revenue.necessity|default:"---" }}</span> {{ summary.currency }}
+                         <br/><span data-table-label>({{ summary.categorized_revenue.necessity|percentage:summary.revenue }} %)</span>
                     </a>
                 </th>
-                <th class="alert alert-success">
+                <th class="alert alert-success" data-table-summary-row>
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_revenue.nice|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_revenue.nice|percentage:summary.revenue }} %)
+                        <span data-table-amount>{{ summary.categorized_revenue.nice|default:"---" }}</span> {{ summary.currency }}
+                         <br/><span data-table-label>({{ summary.categorized_revenue.nice|percentage:summary.revenue }} %)</span>
                     </a>
                 </th>
-                <th class="alert alert-success">
+                <th class="alert alert-success"  data-table-summary-row>
                      <a href="{% url 'record:month' month=monthId year=year %}">
-                        {{ summary.categorized_revenue.saving|default:"---" }} {{ summary.currency }} <br/>({{ summary.categorized_revenue.saving|percentage:summary.revenue }} %)
+                        <span data-table-amount>{{ summary.categorized_revenue.saving|default:"---" }}</span> {{ summary.currency }}
+                         <br/><span data-table-label>({{ summary.categorized_revenue.saving|percentage:summary.revenue }} %)</span>
                     </a>
                 </th>
             </tr>
@@ -187,6 +211,8 @@
     
     
     <canvas data-chart-revenue/></div>
+
+    <canvas data-chart-revenue-debrief/></div>
     
     <table class="table">
         <colgroup>

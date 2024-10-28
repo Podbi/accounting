@@ -1,6 +1,8 @@
 function sanitizeAmount(amount)
 {
-    return parseFloat(amount.replace(/,/g, ''));
+    amount = parseFloat(amount.replace(/,/g, ''));
+
+    return isNaN(amount) ? '0.00' : amount.toFixed(2);
 }
 
 function generateRandonColour()
@@ -12,14 +14,14 @@ function generateRandonColour()
     return "rgb(" + r + "," + g + "," + b + ")";
 }
 
-function calculateChartData(tableElement)
+function calculateChartData(tableElement, label, rowAttributeName = '[data-table-row]')
 {
     var labels = [];
     var data = [];
     var colors = [];
 
-    $(tableElement).find('[data-table-row]').each(function(index, element) {
-        labels.push($(element).find('[data-table-label]').text());
+    $(tableElement).find(rowAttributeName).each(function(index, element) {
+        labels.push($(element).find('[data-table-label]').text().replace(/[\s\n]+/g, ''));
         data.push(sanitizeAmount($(element).find('[data-table-amount]').text()));
         colors.push(generateRandonColour());
     });   
@@ -27,6 +29,7 @@ function calculateChartData(tableElement)
     return {
         labels : labels,
         datasets : [{
+            label : label,
             data : data,
             borderWidth : 1,
             backgroundColor : colors,
@@ -42,7 +45,7 @@ function calculateBarChartData(tableElement, label)
     var colors = [];
 
     $(tableElement).find('[data-table-row]').each(function(index, element) {
-        labels.push($(element).find('[data-table-label]').text());
+        labels.push($(element).find('[data-table-label]').text().replace(/[\s\n]+/g, ''));
         var amount = sanitizeAmount($(element).find('[data-table-amount]').text());
         data.push(amount);
         if (amount > 0) {
