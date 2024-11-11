@@ -63,7 +63,7 @@ class RecordSummaryRepository:
                     record.money,
                     currency.code AS currency,
                     source.name AS source,
-                    category.name AS category,
+                    category.name AS category
                 FROM reports_record AS record 
                 JOIN reports_currency AS currency ON record.currency_id = currency.id 
                 JOIN reports_recordtype AS type ON record.type_id = type.id
