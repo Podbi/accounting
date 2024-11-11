@@ -210,9 +210,9 @@
     </table>
     
     
-    <canvas data-chart-revenue/></div>
+    <canvas data-chart-revenue/></canvas>
 
-    <canvas data-chart-revenue-debrief/></div>
+    <canvas data-chart-revenue-debrief/></canvas>
     
     <table class="table">
         <colgroup>
@@ -224,8 +224,16 @@
         </colgroup>
         <thead>
             <tr>
-                <th>Výsledek měsíce</th>
-                
+                <th rowspan="2">Výsledek měsíce</th>
+                <th>Celkový Výsledek</th>
+                <th>Výsledek "Nutné"</th>
+                <th>Výsledek "Navíc"</th>
+                <th>Výsledek "Spoření"</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+                <th></th>
                 <th
                     {% if summary.summary >= 0 %}
                         class="alert alert-success"
@@ -238,7 +246,7 @@
                     </a>
                 </th>
 
-                <th
+                <td
                     {% if summary.categorized_summary.necessity >= 0 %}
                         class="alert alert-success"
                     {% else %}
@@ -248,9 +256,9 @@
                     <a href="{% url 'record:month' month=monthId year=year %}">
                         {{ summary.categorized_summary.necessity|default:"---" }} {{ summary.currency }}
                     </a>
-                </th>
+                </td>
 
-                <th
+                <td
                     {% if summary.categorized_summary.nice >= 0 %}
                         class="alert alert-success"
                     {% else %}
@@ -260,9 +268,9 @@
                     <a href="{% url 'record:month' month=monthId year=year %}">
                         {{ summary.categorized_summary.nice|default:"---" }} {{ summary.currency }}
                     </a>
-                </th>
+                </td>
 
-                <th
+                <td
                     {% if summary.categorized_summary.saving >= 0 %}
                         class="alert alert-success"
                     {% else %}
@@ -272,9 +280,8 @@
                     <a href="{% url 'record:month' month=monthId year=year %}">
                         {{ summary.categorized_summary.saving|default:"---" }} {{ summary.currency }}
                     </a>
-                </th>
+                </td>
             </tr>
-        </thead>
-    </tbody>
+        </tbody>
     </table>
 {% endblock %}
