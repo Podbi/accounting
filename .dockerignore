@@ -1,0 +1,11 @@
+.git
+.gitignore
+.idea
+.settings
+.project
+.pydevproject
+.venv
+**/__pycache__
+**/*.pyc
+**/*.pyo
+.DS_Store

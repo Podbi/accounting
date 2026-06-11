@@ -10,6 +10,12 @@ from data.knownPayments import knownPayments
 CURRENCY_CZK = 1
 SOURCE_VALET = 1
 
+ROW_NUMBER_DATE = 0
+ROW_NUMBER_ACCOUNT = 3
+ROW_NUMBER_AMOUNT = 4
+ROW_NUMBER_DESCRIPTION_SENDER = 14
+ROW_NUMBER_DESCRIPTION_RECEIVER = 15
+
 if len(sys.argv) < 2:
     raise Exception('Málo vstupních argumentů. Zadej název souboru.')
 
@@ -26,7 +32,7 @@ class KnownPaymentsResolver:
         record = self._resolvePaymentByAmount(date, amount)
         if record:
             return record
-        record = self._resolvePaymentByIssuerNote(date, amount, row[15])
+        record = self._resolvePaymentByIssuerNote(date, amount, row[ROW_NUMBER_ACCOUNT])
         if record:
             return record
 
@@ -82,24 +88,27 @@ with open(filepath, 'r', encoding='utf-8', errors='replace') as file:
     for row in reader:
         if len(row) < 10:
             continue
-        match = re.match(r'^[0-9]{2}\.[0-9]{2}\.', row[0])
+        match = re.match(r'^[0-9]{2}\.[0-9]{2}\.', row[ROW_NUMBER_DATE])
         if match == None:
             continue
         print('.', end='')
         
         date = match.group(0)
-        amount = row[4]
+        amount = row[ROW_NUMBER_AMOUNT]
 
         record = resolver.resolve(date, amount, row)
         if record != None:
             records.append(record)
         else:
+            place = row[ROW_NUMBER_ACCOUNT]
+            if row[ROW_NUMBER_DESCRIPTION_RECEIVER].strip() != '':
+                place = row[ROW_NUMBER_DESCRIPTION_RECEIVER]
             records.append(
                 resolver.createRecord(
                     date,
                     amount,
-                    row[13],
-                    row[15],
+                    row[ROW_NUMBER_DESCRIPTION_SENDER],
+                    place,
                     None,
                     None
                 )
@@ -113,5 +122,4 @@ with open('bank.csv', 'w', encoding='utf-8') as csvfile:
     writer.writerow(['Import'])
     for record in records:
         writer.writerow(record)
-        
 print('CSV soubor s názvem "bank.csv" byl úspěšně vytvořen.')

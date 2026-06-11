@@ -26,7 +26,7 @@ SECRET_KEY = 'kb24g#utw7&x^s1tufg062hfn#kx(4&6+1xy5_=ndz)pedw-!%'
 DEBUG = True
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Internal IP Addresses
 

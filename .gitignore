@@ -47,7 +47,16 @@ Network Trash Folder
 Temporary Items
 .apdisk
 db.sqlite3
-.settings/org.eclipse.core.resources.prefs
+.settings/
+.idea/
 **/__pycache__/
 __pycache__\
 *.pyc
+
+# Local import data (private)
+import/data/
+import/bank.csv
+import/cafeteria.csv
+import/mobile.csv
+import/sodexo.txt
+import/*.pdf
